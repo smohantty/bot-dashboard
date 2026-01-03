@@ -21,21 +21,32 @@ const ActivityLog: React.FC = () => {
             flexDirection: 'column',
             overflow: 'hidden',
             minHeight: '180px',
-            maxHeight: '340px',
+            maxHeight: '380px',
             animationDelay: '160ms'
         }}>
             {/* Header */}
             <div className="card-header">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--text-secondary)' }}>
-                        <path d="M12 8v4l3 3" />
-                        <circle cx="12" cy="12" r="10" />
-                    </svg>
+                    <div style={{
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '8px',
+                        background: 'var(--accent-subtle)',
+                        border: '1px solid rgba(0, 245, 212, 0.15)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" strokeWidth="2">
+                            <path d="M12 8v4l3 3" />
+                            <circle cx="12" cy="12" r="10" />
+                        </svg>
+                    </div>
                     <span className="card-header-title">Activity</span>
                 </div>
                 {orderHistory.length > 0 && (
-                    <span className="badge badge-muted">
-                        {orderHistory.length} events
+                    <span className="badge badge-muted" style={{ fontFamily: 'var(--font-mono)', fontSize: '10px' }}>
+                        {orderHistory.length}
                     </span>
                 )}
             </div>
@@ -44,32 +55,21 @@ const ActivityLog: React.FC = () => {
             {orderHistory.length > 0 && (
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: '70px 50px 65px 1fr 70px',
-                    padding: '10px 16px',
+                    gridTemplateColumns: '70px 50px 70px 1fr 80px',
+                    padding: '10px 18px',
                     fontSize: '9px',
                     color: 'var(--text-tertiary)',
                     textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
+                    letterSpacing: '0.6px',
                     fontWeight: 600,
                     borderBottom: '1px solid var(--border-color)',
                     background: 'rgba(0, 0, 0, 0.2)',
                     alignItems: 'center'
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span style={{
-                            width: '10px',
-                            display: 'inline-block',
-                            textAlign: 'center',
-                            fontSize: '10px',
-                            opacity: 0
-                        }}>●</span>
-                        <span>Status</span>
-                    </div>
+                    <span>Status</span>
                     <span>Side</span>
-
                     <span>Size</span>
                     <span>Price</span>
-
                     <span style={{ textAlign: 'right' }}>Fee</span>
                 </div>
             )}
@@ -85,33 +85,45 @@ const ActivityLog: React.FC = () => {
             >
                 {orderHistory.length === 0 ? (
                     <div style={{
-                        padding: '50px 20px',
+                        padding: '60px 20px',
                         textAlign: 'center',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        gap: '12px'
+                        gap: '16px'
                     }}>
                         <div style={{
-                            width: '48px',
-                            height: '48px',
+                            width: '56px',
+                            height: '56px',
                             borderRadius: '50%',
                             background: 'var(--bg-hover)',
+                            border: '1px solid var(--border-color)',
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
+                            animation: 'pulse 3s ease-in-out infinite'
                         }}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="2">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="1.5">
                                 <path d="M12 8v4l3 3" />
                                 <circle cx="12" cy="12" r="10" />
                             </svg>
                         </div>
-                        <span style={{
-                            color: 'var(--text-tertiary)',
-                            fontSize: '13px'
-                        }}>
-                            Waiting for orders...
-                        </span>
+                        <div>
+                            <div style={{
+                                color: 'var(--text-secondary)',
+                                fontSize: '13px',
+                                fontWeight: 500,
+                                marginBottom: '4px'
+                            }}>
+                                Waiting for orders...
+                            </div>
+                            <div style={{
+                                color: 'var(--text-tertiary)',
+                                fontSize: '11px'
+                            }}>
+                                Orders will appear here as they execute
+                            </div>
+                        </div>
                     </div>
                 ) : (
                     orderHistory.map((order, idx) => (
@@ -133,10 +145,11 @@ const OrderEventRow: React.FC<{
     szDecimals: number;
     isFirst?: boolean;
 }> = ({ order, szDecimals, isFirst }) => {
+    const [isHovered, setIsHovered] = React.useState(false);
     const isBuy = order.side === 'Buy';
     const isFilled = order.status === 'FILLED';
 
-    const sideColor = isBuy ? 'var(--color-buy)' : 'var(--color-sell)';
+    const sideColor = isBuy ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)';
 
     const getStatusConfig = () => {
         switch (order.status) {
@@ -144,7 +157,7 @@ const OrderEventRow: React.FC<{
                 return {
                     icon: '✓',
                     label: 'Filled',
-                    color: 'var(--color-buy)',
+                    color: 'var(--color-buy-bright)',
                     bg: 'var(--color-buy-bg)'
                 };
             case 'OPEN':
@@ -159,7 +172,7 @@ const OrderEventRow: React.FC<{
                     icon: '◐',
                     label: 'Opening',
                     color: 'var(--color-warning)',
-                    bg: 'rgba(255, 171, 0, 0.1)'
+                    bg: 'rgba(245, 158, 11, 0.1)'
                 };
             case 'CANCELLED':
                 return {
@@ -172,7 +185,7 @@ const OrderEventRow: React.FC<{
                 return {
                     icon: '!',
                     label: order.status,
-                    color: 'var(--color-sell)',
+                    color: 'var(--color-sell-bright)',
                     bg: 'var(--color-sell-bg)'
                 };
         }
@@ -181,25 +194,26 @@ const OrderEventRow: React.FC<{
     const statusConfig = getStatusConfig();
 
     return (
-        <div style={{
-            display: 'grid',
-            gridTemplateColumns: '70px 50px 65px 1fr 70px',
-            alignItems: 'center',
-            padding: '10px 16px',
-            fontSize: '12px',
-            borderBottom: '1px solid var(--border-color)',
-            background: isFirst ? 'rgba(0, 240, 192, 0.02)' : 'transparent',
-            animation: isFirst ? 'fadeIn 0.3s ease-out' : 'none',
-            transition: 'background var(--transition-fast)'
-        }}
-            onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--bg-hover)';
+        <div
+            style={{
+                display: 'grid',
+                gridTemplateColumns: '70px 50px 70px 1fr 80px',
+                alignItems: 'center',
+                padding: '12px 18px',
+                fontSize: '12px',
+                borderBottom: '1px solid var(--border-color)',
+                background: isFirst
+                    ? 'rgba(0, 245, 212, 0.04)'
+                    : isHovered
+                        ? 'var(--bg-hover)'
+                        : 'transparent',
+                animation: isFirst ? 'flashIn 0.5s ease-out' : 'none',
+                transition: 'background var(--transition-fast)'
             }}
-            onMouseLeave={(e) => {
-                e.currentTarget.style.background = isFirst ? 'rgba(0, 240, 192, 0.02)' : 'transparent';
-            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
-            {/* Status - First Column */}
+            {/* Status */}
             <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -207,54 +221,60 @@ const OrderEventRow: React.FC<{
             }}>
                 <span style={{
                     color: statusConfig.color,
-                    fontSize: '10px'
+                    fontSize: '10px',
+                    animation: order.status === 'OPEN' ? 'pulse 2s ease-in-out infinite' : 'none'
                 }}>
                     {statusConfig.icon}
                 </span>
                 <span style={{
                     color: statusConfig.color,
-                    fontSize: '11px',
-                    fontWeight: 600
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    letterSpacing: '0.3px'
                 }}>
                     {statusConfig.label}
                 </span>
             </div>
 
-            {/* Side - Second Column */}
+            {/* Side */}
             <span style={{
                 color: sideColor,
-                fontSize: '11px',
+                fontSize: '10px',
                 fontWeight: 600,
-                textTransform: 'uppercase'
+                textTransform: 'uppercase',
+                letterSpacing: '0.3px'
             }}>
                 {order.side}
             </span>
 
-            {/* Size - Third Column */}
+            {/* Size */}
             <span style={{
                 fontFamily: 'var(--font-mono)',
                 color: 'var(--text-primary)',
                 fontWeight: 500,
-                fontSize: '11px'
+                fontSize: '11px',
+                letterSpacing: '-0.02em'
             }}>
                 {order.size.toFixed(szDecimals)}
             </span>
 
-            {/* Price - Fourth Column */}
+            {/* Price */}
             <span style={{
                 color: 'var(--text-secondary)',
                 fontFamily: 'var(--font-mono)',
-                fontSize: '11px'
+                fontSize: '11px',
+                letterSpacing: '-0.02em'
             }}>
                 ${order.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
 
-            {/* Fee - Fifth Column */}
+            {/* Fee */}
             <span style={{
-                color: isFilled && order.fee > 0 ? 'var(--color-sell)' : 'var(--text-muted)',
+                color: isFilled && order.fee > 0 ? 'var(--color-sell-bright)' : 'var(--text-muted)',
                 fontSize: '11px',
                 fontFamily: 'var(--font-mono)',
-                textAlign: 'right'
+                textAlign: 'right',
+                letterSpacing: '-0.02em'
             }}>
                 {isFilled && order.fee > 0 ? `-$${order.fee.toFixed(4)}` : '--'}
             </span>

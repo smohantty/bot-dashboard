@@ -29,8 +29,25 @@ const ConfigPanel: React.FC = () => {
         }}>
             {/* Header */}
             <div className="card-header">
-                <span className="card-header-title">Configuration</span>
-                <span className="badge badge-muted">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '8px',
+                        background: 'var(--bg-hover)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        border: '1px solid var(--border-color)'
+                    }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2">
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                        </svg>
+                    </div>
+                    <span className="card-header-title">Configuration</span>
+                </div>
+                <span className={`badge ${isPerp ? 'badge-neutral' : 'badge-muted'}`}>
                     {config.type.replace('_', ' ').toUpperCase()}
                 </span>
             </div>
@@ -38,27 +55,28 @@ const ConfigPanel: React.FC = () => {
             {/* Config Grid */}
             <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)'
+                gridTemplateColumns: 'repeat(2, 1fr)'
             }}>
                 <ConfigCell label="Symbol" value={config.symbol} icon="coin" />
-                <ConfigCell
-                    label="Range"
-                    value={`$${config.lower_price.toLocaleString()} - $${config.upper_price.toLocaleString()}`}
-                    icon="range"
-                />
-                <ConfigCell label="Zones" value={config.grid_count.toString()} icon="grid" />
                 <ConfigCell
                     label="Investment"
                     value={`$${config.total_investment.toLocaleString()}`}
                     icon="wallet"
                     highlight
+                    highlightColor="var(--accent-gold)"
                 />
+                <ConfigCell
+                    label="Price Range"
+                    value={`$${config.lower_price.toLocaleString()} – $${config.upper_price.toLocaleString()}`}
+                    icon="range"
+                />
+                <ConfigCell label="Zones" value={config.grid_count.toString()} icon="grid" />
 
                 {isPerp ? (
                     <>
                         <ConfigCell
                             label="Leverage"
-                            value={`${config.leverage}x`}
+                            value={`${config.leverage}×`}
                             icon="leverage"
                             highlight
                             highlightColor="var(--accent-primary)"
@@ -69,13 +87,13 @@ const ConfigPanel: React.FC = () => {
                             icon="trend"
                             highlight
                             highlightColor={
-                                config.grid_bias === 'long' ? 'var(--color-buy)' :
-                                    config.grid_bias === 'short' ? 'var(--color-sell)' :
+                                config.grid_bias === 'long' ? 'var(--color-buy-bright)' :
+                                    config.grid_bias === 'short' ? 'var(--color-sell-bright)' :
                                         'var(--text-primary)'
                             }
                         />
                         <ConfigCell
-                            label="Margin"
+                            label="Margin Mode"
                             value={config.is_isolated ? 'Isolated' : 'Cross'}
                             icon="shield"
                         />
@@ -86,31 +104,25 @@ const ConfigPanel: React.FC = () => {
                             icon="percent"
                             highlight
                             highlightColor="var(--accent-primary)"
-                            tooltip="Profit margin per roundtrip (before fees)"
+                            tooltip="Profit margin per roundtrip"
                             isLast
                         />
                     </>
                 ) : (
                     <>
-                        {/* Spot Grid Specific Fields */}
                         <ConfigCell
                             label="Grid Type"
                             value={config.grid_type.charAt(0).toUpperCase() + config.grid_type.slice(1)}
                             icon="grid"
-                            highlight
                         />
-                        {/* Spacer to align Spacing to end if needed, or just let it flow. 
-                            We have 6 items for Spot: Symbol, Range, Zones, Inv, Type, Spacing.
-                            4 cols -> Row 1: Sym, Range, Zones, Inv. Row 2: Type, Spacing, Empty, Empty.
-                            This looks fine.
-                        */}
                         <ConfigCell
                             label="Spacing"
                             value={formatSpacing(gridSpacingPct)}
                             icon="percent"
                             highlight
                             highlightColor="var(--accent-primary)"
-                            tooltip="Profit margin per roundtrip (before fees)"
+                            tooltip="Profit margin per roundtrip"
+                            isLast
                         />
                     </>
                 )}
@@ -164,11 +176,6 @@ const icons: Record<string, React.ReactNode> = {
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
         </svg>
     ),
-    spacing: (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 10H3M21 6H3M21 14H3M21 18H3" />
-        </svg>
-    ),
     percent: (
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="6" cy="6" r="3" />
@@ -187,55 +194,74 @@ const ConfigCell: React.FC<{
     highlightColor?: string;
     tooltip?: string;
     isLast?: boolean;
-}> = ({ label, value, subValue, icon, highlight, highlightColor, tooltip, isLast }) => (
-    <div style={{
-        padding: '16px 18px',
-        borderRight: isLast ? 'none' : '1px solid var(--border-color)',
-        borderBottom: '1px solid var(--border-color)',
-        background: highlight ? `${highlightColor || 'var(--accent-primary)'}08` : 'transparent',
-        transition: 'background var(--transition-fast)'
-    }}>
-        <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontSize: '10px',
-            color: 'var(--text-tertiary)',
-            marginBottom: '8px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            fontWeight: 500
-        }}>
-            {icon && <span style={{ opacity: 0.7 }}>{icons[icon]}</span>}
-            {tooltip ? (
-                <Tooltip content={tooltip}>
-                    <span style={{ cursor: 'help', borderBottom: '1px dotted var(--text-tertiary)' }}>
-                        {label}
-                    </span>
-                </Tooltip>
-            ) : (
-                label
-            )}
-        </div>
-        <div style={{
-            fontSize: '13px',
-            fontWeight: highlight ? 600 : 500,
-            color: highlight ? (highlightColor || 'var(--accent-primary)') : 'var(--text-primary)',
-            fontFamily: 'var(--font-mono)',
-            letterSpacing: '-0.01em'
-        }}>
-            {value}
-        </div>
-        {subValue && (
+}> = ({ label, value, subValue, icon, highlight, highlightColor, tooltip, isLast }) => {
+    const [isHovered, setIsHovered] = React.useState(false);
+
+    return (
+        <div
+            style={{
+                padding: '16px 18px',
+                borderRight: isLast ? 'none' : '1px solid var(--border-color)',
+                borderBottom: '1px solid var(--border-color)',
+                background: isHovered
+                    ? 'rgba(255, 255, 255, 0.02)'
+                    : highlight ? `${highlightColor || 'var(--accent-primary)'}08` : 'transparent',
+                transition: 'all var(--transition-fast)'
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
             <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
                 fontSize: '10px',
                 color: 'var(--text-tertiary)',
-                marginTop: '4px'
+                marginBottom: '10px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.6px',
+                fontWeight: 500
             }}>
-                {subValue}
+                {icon && (
+                    <span style={{
+                        opacity: 0.6,
+                        color: highlight ? highlightColor : 'inherit'
+                    }}>
+                        {icons[icon]}
+                    </span>
+                )}
+                {tooltip ? (
+                    <Tooltip content={tooltip}>
+                        <span style={{ cursor: 'help', borderBottom: '1px dotted var(--text-tertiary)' }}>
+                            {label}
+                        </span>
+                    </Tooltip>
+                ) : (
+                    label
+                )}
             </div>
-        )}
-    </div>
-);
+            <div style={{
+                fontSize: '14px',
+                fontWeight: highlight ? 600 : 500,
+                color: highlight ? (highlightColor || 'var(--accent-primary)') : 'var(--text-primary)',
+                fontFamily: 'var(--font-mono)',
+                letterSpacing: '-0.02em',
+                textShadow: highlight ? `0 0 20px ${highlightColor || 'var(--accent-glow)'}40` : 'none'
+            }}>
+                {value}
+            </div>
+            {subValue && (
+                <div style={{
+                    fontSize: '10px',
+                    color: 'var(--text-tertiary)',
+                    marginTop: '4px',
+                    letterSpacing: '0.3px'
+                }}>
+                    {subValue}
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default ConfigPanel;
