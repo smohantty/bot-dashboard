@@ -302,10 +302,9 @@ const MetricCell: React.FC<{
         minWidth: '75px'
     }}>
         <div style={{
-            fontSize: '8px',
+            fontSize: '10px',
             color: 'var(--text-tertiary)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
+            letterSpacing: '0.2px',
             fontWeight: 500,
             marginBottom: '3px'
         }}>
@@ -343,10 +342,9 @@ const MetricCellCompact: React.FC<{
         borderRadius: highlight ? 'var(--radius-sm)' : undefined
     }}>
         <span style={{
-            fontSize: '9px',
+            fontSize: '10px',
             color: highlight ? 'var(--accent-primary)' : 'var(--text-tertiary)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.3px',
+            letterSpacing: '0.2px',
             fontWeight: highlight ? 600 : 500
         }}>
             {label}
