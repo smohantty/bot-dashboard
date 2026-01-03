@@ -106,10 +106,10 @@ export interface GridState {
 export interface OrderEvent {
     oid: number;
     cloid?: string | null;
-    side: string;
+    side: 'Buy' | 'Sell';
     price: number;
     size: number;
-    status: string;
+    status: 'open' | 'filled' | 'opening' | 'cancelled';
     fee: number;
     is_taker: boolean;
 }

@@ -20,8 +20,8 @@ const ActivityLog: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
-            minHeight: '180px',
-            maxHeight: '380px',
+            minHeight: '160px',
+            maxHeight: '350px',
             animationDelay: '160ms'
         }}>
             {/* Header */}
@@ -51,25 +51,24 @@ const ActivityLog: React.FC = () => {
                 )}
             </div>
 
-            {/* Column Headers */}
+            {/* Column Headers - Simplified 4 columns */}
             {orderHistory.length > 0 && (
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: '70px 50px 70px 1fr 80px',
-                    padding: '10px 18px',
+                    gridTemplateColumns: '1fr 80px 80px 70px',
+                    padding: '8px 16px',
                     fontSize: '9px',
                     color: 'var(--text-tertiary)',
                     textTransform: 'uppercase',
-                    letterSpacing: '0.6px',
+                    letterSpacing: '0.5px',
                     fontWeight: 600,
                     borderBottom: '1px solid var(--border-color)',
                     background: 'rgba(0, 0, 0, 0.2)',
                     alignItems: 'center'
                 }}>
-                    <span>Status</span>
-                    <span>Side</span>
-                    <span>Size</span>
-                    <span>Price</span>
+                    <span>Order</span>
+                    <span style={{ textAlign: 'right' }}>Size</span>
+                    <span style={{ textAlign: 'right' }}>Price</span>
                     <span style={{ textAlign: 'right' }}>Fee</span>
                 </div>
             )}
@@ -85,16 +84,16 @@ const ActivityLog: React.FC = () => {
             >
                 {orderHistory.length === 0 ? (
                     <div style={{
-                        padding: '60px 20px',
+                        padding: '48px 20px',
                         textAlign: 'center',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        gap: '16px'
+                        gap: '12px'
                     }}>
                         <div style={{
-                            width: '56px',
-                            height: '56px',
+                            width: '48px',
+                            height: '48px',
                             borderRadius: '50%',
                             background: 'var(--bg-hover)',
                             border: '1px solid var(--border-color)',
@@ -103,7 +102,7 @@ const ActivityLog: React.FC = () => {
                             justifyContent: 'center',
                             animation: 'pulse 3s ease-in-out infinite'
                         }}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="1.5">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="1.5">
                                 <path d="M12 8v4l3 3" />
                                 <circle cx="12" cy="12" r="10" />
                             </svg>
@@ -111,17 +110,17 @@ const ActivityLog: React.FC = () => {
                         <div>
                             <div style={{
                                 color: 'var(--text-secondary)',
-                                fontSize: '13px',
+                                fontSize: '12px',
                                 fontWeight: 500,
-                                marginBottom: '4px'
+                                marginBottom: '2px'
                             }}>
                                 Waiting for orders...
                             </div>
                             <div style={{
                                 color: 'var(--text-tertiary)',
-                                fontSize: '11px'
+                                fontSize: '10px'
                             }}>
-                                Orders will appear here as they execute
+                                Orders will appear here
                             </div>
                         </div>
                     </div>
@@ -132,6 +131,7 @@ const ActivityLog: React.FC = () => {
                             order={order}
                             szDecimals={szDecimals}
                             isFirst={idx === 0}
+                            isOdd={idx % 2 === 1}
                         />
                     ))
                 )}
@@ -144,115 +144,96 @@ const OrderEventRow: React.FC<{
     order: OrderEvent;
     szDecimals: number;
     isFirst?: boolean;
-}> = ({ order, szDecimals, isFirst }) => {
+    isOdd?: boolean;
+}> = ({ order, szDecimals, isFirst, isOdd }) => {
     const [isHovered, setIsHovered] = React.useState(false);
     const isBuy = order.side === 'Buy';
-    const isFilled = order.status === 'FILLED';
+
+    const isFilled = order.status === 'filled';
+    const isOpen = order.status === 'open';
 
     const sideColor = isBuy ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)';
+    const sideBg = isBuy ? 'var(--color-buy-bg)' : 'var(--color-sell-bg)';
 
     const getStatusConfig = () => {
         switch (order.status) {
-            case 'FILLED':
-                return {
-                    icon: '✓',
-                    label: 'Filled',
-                    color: 'var(--color-buy-bright)',
-                    bg: 'var(--color-buy-bg)'
-                };
-            case 'OPEN':
-                return {
-                    icon: '●',
-                    label: 'Open',
-                    color: 'var(--accent-primary)',
-                    bg: 'var(--accent-subtle)'
-                };
-            case 'OPENING':
-                return {
-                    icon: '◐',
-                    label: 'Opening',
-                    color: 'var(--color-warning)',
-                    bg: 'rgba(245, 158, 11, 0.1)'
-                };
-            case 'CANCELLED':
-                return {
-                    icon: '✕',
-                    label: 'Cancelled',
-                    color: 'var(--text-tertiary)',
-                    bg: 'transparent'
-                };
+            case 'filled':
+                return { dot: '●', label: 'filled', color: 'var(--color-buy-bright)' };
+            case 'open':
+                return { dot: '○', label: 'open', color: 'var(--accent-primary)' };
+            case 'opening':
+                return { dot: '◐', label: 'opening', color: 'var(--color-warning)' };
+            case 'cancelled':
+                return { dot: '○', label: 'cancelled', color: 'var(--text-muted)' };
             default:
-                return {
-                    icon: '!',
-                    label: order.status,
-                    color: 'var(--color-sell-bright)',
-                    bg: 'var(--color-sell-bg)'
-                };
+                return { dot: '○', label: order.status, color: 'var(--text-tertiary)' };
         }
     };
 
     const statusConfig = getStatusConfig();
+    const altRowBg = isOdd ? 'rgba(255, 255, 255, 0.015)' : 'transparent';
 
     return (
         <div
             style={{
                 display: 'grid',
-                gridTemplateColumns: '70px 50px 70px 1fr 80px',
+                gridTemplateColumns: '1fr 80px 80px 70px',
                 alignItems: 'center',
-                padding: '12px 18px',
-                fontSize: '12px',
+                padding: '10px 16px',
+                fontSize: '11px',
                 borderBottom: '1px solid var(--border-color)',
                 background: isFirst
                     ? 'rgba(0, 245, 212, 0.04)'
                     : isHovered
                         ? 'var(--bg-hover)'
-                        : 'transparent',
+                        : altRowBg,
                 animation: isFirst ? 'flashIn 0.5s ease-out' : 'none',
                 transition: 'background var(--transition-fast)'
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            {/* Status */}
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-            }}>
+            {/* Order: Combined Status + Side Badge */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {/* Status dot */}
                 <span style={{
                     color: statusConfig.color,
-                    fontSize: '10px',
-                    animation: order.status === 'OPEN' ? 'pulse 2s ease-in-out infinite' : 'none'
+                    fontSize: '8px',
+                    animation: isOpen ? 'pulse 2s ease-in-out infinite' : 'none'
                 }}>
-                    {statusConfig.icon}
+                    {statusConfig.dot}
                 </span>
+
+                {/* Side badge */}
                 <span style={{
-                    color: statusConfig.color,
-                    fontSize: '10px',
+                    padding: '3px 8px',
+                    borderRadius: '4px',
+                    fontSize: '9px',
                     fontWeight: 600,
-                    letterSpacing: '0.3px'
+                    letterSpacing: '0.3px',
+                    background: sideBg,
+                    color: sideColor,
+                    border: `1px solid ${sideColor}25`
+                }}>
+                    {isBuy ? 'BUY' : 'SELL'}
+                </span>
+
+                {/* Status text (subtle) */}
+                <span style={{
+                    fontSize: '9px',
+                    color: 'var(--text-muted)',
+                    textTransform: 'lowercase'
                 }}>
                     {statusConfig.label}
                 </span>
             </div>
-
-            {/* Side */}
-            <span style={{
-                color: sideColor,
-                fontSize: '10px',
-                fontWeight: 600,
-                textTransform: 'uppercase',
-                letterSpacing: '0.3px'
-            }}>
-                {order.side}
-            </span>
 
             {/* Size */}
             <span style={{
                 fontFamily: 'var(--font-mono)',
                 color: 'var(--text-primary)',
                 fontWeight: 500,
-                fontSize: '11px',
+                textAlign: 'right',
                 letterSpacing: '-0.02em'
             }}>
                 {order.size.toFixed(szDecimals)}
@@ -262,7 +243,7 @@ const OrderEventRow: React.FC<{
             <span style={{
                 color: 'var(--text-secondary)',
                 fontFamily: 'var(--font-mono)',
-                fontSize: '11px',
+                textAlign: 'right',
                 letterSpacing: '-0.02em'
             }}>
                 ${order.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
@@ -271,7 +252,6 @@ const OrderEventRow: React.FC<{
             {/* Fee */}
             <span style={{
                 color: isFilled && order.fee > 0 ? 'var(--color-sell-bright)' : 'var(--text-muted)',
-                fontSize: '11px',
                 fontFamily: 'var(--font-mono)',
                 textAlign: 'right',
                 letterSpacing: '-0.02em'
