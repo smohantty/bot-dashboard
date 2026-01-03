@@ -283,7 +283,6 @@
       "type": "object",
       "required": [
         "symbol",
-        "price",
         "state",
         "uptime",
         "position_size",
@@ -302,9 +301,6 @@
       "properties": {
         "symbol": {
           "type": "string"
-        },
-        "price": {
-          "type": "number"
         },
         "state": {
           "type": "string",
@@ -370,7 +366,6 @@
       "type": "object",
       "required": [
         "symbol",
-        "price",
         "state",
         "uptime",
         "position_size",
@@ -391,9 +386,6 @@
       "properties": {
         "symbol": {
           "type": "string"
-        },
-        "price": {
-          "type": "number"
         },
         "state": {
           "type": "string"
@@ -474,7 +466,6 @@
       "required": [
         "symbol",
         "strategy_type",
-        "current_price",
         "zones"
       ],
       "properties": {
@@ -487,9 +478,6 @@
             "spot_grid",
             "perp_grid"
           ]
-        },
-        "current_price": {
-          "type": "number"
         },
         "grid_bias": {
           "type": [
@@ -516,7 +504,6 @@
         "pending_side",
         "has_order",
         "is_reduce_only",
-        "action_type",
         "entry_price",
         "roundtrip_count"
       ],
@@ -546,14 +533,6 @@
         "is_reduce_only": {
           "type": "boolean",
           "description": "true for closing orders in perp"
-        },
-        "action_type": {
-          "type": "string",
-          "enum": [
-            "open",
-            "close"
-          ],
-          "description": "For frontend styling"
         },
         "entry_price": {
           "type": "number"

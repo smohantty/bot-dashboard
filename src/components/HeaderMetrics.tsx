@@ -39,7 +39,7 @@ const MetricCard: React.FC<{
 );
 
 const HeaderMetrics: React.FC = () => {
-    const { summary, lastTickTime, systemInfo } = useBotStore();
+    const { summary, lastTickTime, systemInfo, lastPrice } = useBotStore();
 
     // Determine network badge color
     const networkBadge = systemInfo ? {
@@ -95,7 +95,7 @@ const HeaderMetrics: React.FC = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
                 <MetricCard
                     label="MARKET PRICE"
-                    value={`$${s.price.toFixed(4)}`}
+                    value={`$${(lastPrice || 0).toFixed(4)}`}
                     color="var(--accent-primary)"
                     subValue={`${s.symbol} • ${exchangeName} • ${timeStr}`}
                     badge={networkBadge || { text: 'SPOT', color: 'var(--accent-primary)' }}
@@ -139,7 +139,7 @@ const HeaderMetrics: React.FC = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
             <MetricCard
                 label="MARKET PRICE"
-                value={`$${s.price.toFixed(4)}`}
+                value={`$${(lastPrice || 0).toFixed(4)}`}
                 color="var(--accent-primary)"
                 subValue={`${s.symbol} • ${exchangeName} • ${timeStr}`}
                 badge={networkBadge || { text: `PERP ${s.leverage}x`, color: biasColor }}

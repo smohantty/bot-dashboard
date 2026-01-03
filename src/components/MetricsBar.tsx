@@ -8,7 +8,7 @@ import Tooltip from './Tooltip';
  * Row 2: Strategy-specific metrics (spot: balances, perp: position)
  */
 const MetricsBar: React.FC = () => {
-    const { summary, connectionStatus, config } = useBotStore();
+    const { summary, connectionStatus, config, lastPrice } = useBotStore();
 
     // Get decimals from config for consistent formatting
     const szDecimals = config?.sz_decimals ?? 4;
@@ -145,7 +145,7 @@ const MetricsBar: React.FC = () => {
                         letterSpacing: '-0.03em',
                         minWidth: '100px'
                     }}>
-                        {formatPrice(s.price)}
+                        {formatPrice(lastPrice || 0)}
                     </div>
                 </div>
 

@@ -3,7 +3,7 @@ import { useBotStore } from '../context/WebSocketContext';
 import Tooltip from './Tooltip';
 
 const SummaryCard: React.FC = () => {
-    const { summary, lastTickTime, connectionStatus } = useBotStore();
+    const { summary, lastTickTime, connectionStatus, lastPrice } = useBotStore();
 
     if (!summary) {
         return (
@@ -90,7 +90,7 @@ const SummaryCard: React.FC = () => {
                     borderBottom: '1px solid var(--border-color)'
                 }}>
                     {/* Market Price - Hero */}
-                    <PriceHero price={s.price} />
+                    <PriceHero price={lastPrice || 0} />
 
                     {/* Total PnL */}
                     <PnLDisplay
@@ -184,7 +184,7 @@ const SummaryCard: React.FC = () => {
                 gridTemplateColumns: '1fr auto',
                 borderBottom: '1px solid var(--border-color)'
             }}>
-                <PriceHero price={s.price} decimals={4} />
+                <PriceHero price={lastPrice || 0} decimals={4} />
                 <PnLDisplay
                     totalPnl={totalPnl}
                     pnlColor={pnlColor}

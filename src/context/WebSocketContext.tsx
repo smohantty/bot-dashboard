@@ -87,15 +87,12 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode; url: strin
                             break;
                         case 'spot_grid_summary':
                             setSummary({ type: 'spot_grid', data: message.data });
-                            setLastPrice(message.data.price);
                             break;
                         case 'perp_grid_summary':
                             setSummary({ type: 'perp_grid', data: message.data });
-                            setLastPrice(message.data.price);
                             break;
                         case 'grid_state':
                             setGridState(message.data);
-                            setLastPrice(message.data.current_price);
                             break;
                         case 'market_update':
                             setLastPrice(message.data.price);

@@ -31,7 +31,6 @@ export interface SystemInfo {
 
 export interface SpotGridSummary {
     symbol: string;
-    price: number;
     state: string;
     uptime: string; // Human-readable uptime, e.g. "2d 14h 30m"
     position_size: number;
@@ -51,7 +50,6 @@ export interface SpotGridSummary {
 
 export interface PerpGridSummary {
     symbol: string;
-    price: number;
     state: string;
     uptime: string; // Human-readable uptime, e.g. "2d 14h 30m"
     position_size: number;
@@ -96,7 +94,6 @@ export interface ZoneInfo {
 export interface GridState {
     symbol: string;
     strategy_type: string;
-    current_price: number;
     grid_bias?: string;
     zones: ZoneInfo[];
 }
