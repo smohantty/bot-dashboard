@@ -7,7 +7,11 @@ import Tooltip from './Tooltip';
  * Designed to sit at the top of the dashboard
  */
 const MetricsBar: React.FC = () => {
-    const { summary, lastTickTime, connectionStatus } = useBotStore();
+    const { summary, lastTickTime, connectionStatus, config } = useBotStore();
+
+    // Get decimals from config for consistent formatting
+    const szDecimals = config?.sz_decimals ?? 4;
+    const pxDecimals = config?.px_decimals ?? 2;
 
     if (!summary) {
         return (
@@ -56,6 +60,18 @@ const MetricsBar: React.FC = () => {
 
     const biasBg = perpData?.grid_bias === 'Long' ? 'var(--color-buy-bg)' :
         perpData?.grid_bias === 'Short' ? 'var(--color-sell-bg)' : 'var(--accent-subtle)';
+
+    // Format price with fixed decimals
+    const formatPrice = (price: number) => `$${price.toFixed(pxDecimals)}`;
+
+    // Format size with fixed decimals
+    const formatSize = (size: number) => size.toFixed(szDecimals);
+
+    // Format PnL with 2 decimals (always USD)
+    const formatPnl = (pnl: number) => {
+        const sign = pnl >= 0 ? '+' : '';
+        return `${sign}$${Math.abs(pnl).toFixed(2)}`;
+    };
 
     return (
         <div className="card" style={{
@@ -117,32 +133,36 @@ const MetricsBar: React.FC = () => {
                         fontWeight: 700,
                         fontFamily: 'var(--font-mono)',
                         color: 'var(--text-primary)',
-                        letterSpacing: '-0.03em'
+                        letterSpacing: '-0.03em',
+                        minWidth: '120px' // Fixed width to prevent layout shift
                     }}>
-                        ${s.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}
+                        {formatPrice(s.price)}
                     </div>
                 </div>
 
                 {/* Total PnL */}
                 <MetricItem
                     label="Total PnL"
-                    value={`${pnlSign}$${Math.abs(totalPnl).toFixed(2)}`}
+                    value={formatPnl(totalPnl)}
                     valueColor={pnlColor}
                     highlight
+                    minWidth="90px"
                 />
 
                 {/* Realized PnL */}
                 <MetricItem
                     label="Realized"
-                    value={`${s.realized_pnl >= 0 ? '+' : ''}$${Math.abs(s.realized_pnl).toFixed(2)}`}
+                    value={formatPnl(s.realized_pnl)}
                     valueColor={s.realized_pnl >= 0 ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)'}
+                    minWidth="80px"
                 />
 
                 {/* Unrealized PnL */}
                 <MetricItem
                     label="Unrealized"
-                    value={`${s.unrealized_pnl >= 0 ? '+' : ''}$${Math.abs(s.unrealized_pnl).toFixed(2)}`}
+                    value={formatPnl(s.unrealized_pnl)}
                     valueColor={s.unrealized_pnl >= 0 ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)'}
+                    minWidth="80px"
                 />
 
                 {/* Roundtrips */}
@@ -150,14 +170,16 @@ const MetricsBar: React.FC = () => {
                     label="Roundtrips"
                     value={s.roundtrips.toString()}
                     valueColor="var(--accent-primary)"
+                    minWidth="50px"
                 />
 
                 {/* Position */}
                 <MetricItem
                     label="Position"
-                    value={isPerp ? Math.abs(perpData?.position_size || 0).toFixed(4) : (spotData?.position_size || 0).toFixed(4)}
+                    value={formatSize(isPerp ? Math.abs(perpData?.position_size || 0) : (spotData?.position_size || 0))}
                     subValue={isPerp ? perpData?.position_side : undefined}
                     valueColor={isPerp ? positionColor : 'var(--text-primary)'}
+                    minWidth="80px"
                 />
 
                 {/* Spacer */}
@@ -194,14 +216,16 @@ const MetricItem: React.FC<{
     subValue?: string;
     valueColor?: string;
     highlight?: boolean;
-}> = ({ label, value, subValue, valueColor, highlight }) => (
+    minWidth?: string;
+}> = ({ label, value, subValue, valueColor, highlight, minWidth }) => (
     <div style={{
-        padding: '12px 20px',
+        padding: '12px 16px',
         borderRight: '1px solid var(--border-color)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        background: highlight ? 'rgba(0, 245, 212, 0.03)' : 'transparent'
+        background: highlight ? 'rgba(0, 245, 212, 0.03)' : 'transparent',
+        minWidth: minWidth // Fixed min width to prevent layout shift
     }}>
         <div style={{
             fontSize: '9px',
@@ -219,7 +243,8 @@ const MetricItem: React.FC<{
             color: valueColor || 'var(--text-primary)',
             fontFamily: 'var(--font-mono)',
             letterSpacing: '-0.02em',
-            textShadow: highlight ? `0 0 20px ${valueColor}40` : 'none'
+            textShadow: highlight ? `0 0 20px ${valueColor}40` : 'none',
+            whiteSpace: 'nowrap' // Prevent text wrapping
         }}>
             {value}
         </div>
@@ -258,7 +283,7 @@ const ConnectionStatus: React.FC<{ status: 'connected' | 'connecting' | 'disconn
         }
     };
 
-    const config = statusConfig[status];
+    const cfg = statusConfig[status];
 
     return (
         <div style={{
@@ -267,18 +292,18 @@ const ConnectionStatus: React.FC<{ status: 'connected' | 'connecting' | 'disconn
             gap: '6px',
             padding: '5px 10px',
             borderRadius: 'var(--radius-sm)',
-            background: config.bgColor,
-            border: `1px solid ${config.color}30`
+            background: cfg.bgColor,
+            border: `1px solid ${cfg.color}30`
         }}>
-            <div className={`status-dot ${config.dotClass}`} style={{ width: '6px', height: '6px' }} />
+            <div className={`status-dot ${cfg.dotClass}`} style={{ width: '6px', height: '6px' }} />
             <span style={{
                 fontSize: '10px',
                 fontWeight: 600,
-                color: config.color,
+                color: cfg.color,
                 letterSpacing: '0.3px',
                 textTransform: 'uppercase'
             }}>
-                {config.label}
+                {cfg.label}
             </span>
         </div>
     );

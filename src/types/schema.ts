@@ -14,7 +14,9 @@ export interface StrategyConfig {
     // Perp specific
     leverage?: number;
     is_isolated?: boolean;
+    // Decimals for formatting
     sz_decimals?: number;
+    px_decimals?: number;
     grid_bias?: 'long' | 'short';
 }
 
