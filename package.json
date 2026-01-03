@@ -1,8 +1,8 @@
 {
-  "name": "hyperliquid-dashboard",
+  "name": "trading-bot-dashboard",
   "private": true,
-  "version": "0.0.0",
-  "description": "Hyperliquid Trading Bot Dashboard",
+  "version": "1.0.0",
+  "description": "Multi-Exchange Trading Bot Dashboard",
   "author": "Antigravity",
   "type": "module",
   "main": "electron/main.cjs",
@@ -36,16 +36,20 @@
     "vite": "^5.2.0"
   },
   "build": {
-    "appId": "com.hyperliquid.dashboard",
-    "productName": "Hyperliquid Dashboard",
+    "appId": "com.tradingbot.dashboard",
+    "productName": "Trading Bot Dashboard",
     "files": [
       "dist/**/*",
       "electron/**/*",
       "package.json"
     ],
     "artifactName": "${name}-${version}.${ext}",
+    "directories": {
+      "buildResources": "build"
+    },
     "linux": {
       "target": "AppImage",
+      "icon": "build/icon.png",
       "category": "Finance"
     }
   }
