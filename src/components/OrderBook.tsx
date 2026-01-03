@@ -388,7 +388,7 @@ const ZoneRow: React.FC<{
         <div style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: isAsk ? 'flex-end' : 'flex-start',
+            alignItems: isAsk ? 'flex-start' : 'flex-end',
             gap: '1px'
         }}>
             <span style={{
