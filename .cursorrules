@@ -1,0 +1,52 @@
+# Project Rules & Guidelines
+
+## Tech Stack
+- **Framework**: React 18+ (Hooks-based)
+- **Build Tool**: Vite
+- **Language**: TypeScript (Strict)
+- **Runtime**: Electron (Main process in `electron/main.cjs`)
+- **Styling**: CSS Modules / standard CSS with CSS Variables (`src/index.css`)
+
+## Coding Standards
+
+### TypeScript
+- Use strict typing. Avoid `any`.
+- Define interfaces for props and state.
+- Use `src/types/schema.ts` for all shared data types (OrderEvent, StrategyConfig, etc.).
+- **CRITICAL**: Keep `src/types/schema.ts` and `schema/schema.json` in sync with the backend.
+
+### React Components
+- Functional components only.
+- Use `React.FC<Props>` type definition.
+- Destructure props.
+- Place reusable components in `src/components/`.
+- Use `useBotStore` from `src/context/WebSocketContext` for global state.
+
+### State Management
+- **WebSocketContext**: Handles all WS connections and raw data parsing.
+- **BotStore**: Exposes parsed and normalized data (`asks`, `bids`, `pnl`, etc.) to components.
+- Do not create local WebSocket connections in components; usage `useBotStore`.
+
+### Styling & Theming
+- **Theme**: Dark mode optimized.
+- **Variables**: Use CSS variables defined in `src/index.css` for all colors.
+  - Colors: `--bg-primary`, `--bg-secondary`, `--text-primary`, `--text-secondary`, `--accent-primary`.
+  - Trading Colors: `--color-buy`, `--color-sell` (and their `-bg`, `-glow` variants).
+- **Layout**: thoroughly use Flexbox and Grid.
+- **Design Constraints**:
+  - Dashboard must fit 1280x720 min resolution without scrolling the main window (internal scrolls allowed).
+  - High density information display.
+
+## Architecture
+- **Data Flow**: Backend (Python) -> WebSocket -> Electron/React -> WebSocketContext -> Components.
+- **Multi-Bot Support**: `MultiBotLayout` handles switching views between different backend instances on different ports.
+
+## Critical Files
+- `src/index.css`: Global theme variables.
+- `src/types/schema.ts`: TypeScript definitions for WS events.
+- `schema/schema.json`: Source of truth for API contract.
+- `src/context/WebSocketContext.tsx`: Core data handler.
+
+## Electron
+- IPC is minimal; most data comes via WebSocket from localhost.
+- Build commands: `npm run electron:build` for production binary.
