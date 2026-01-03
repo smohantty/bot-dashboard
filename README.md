@@ -1,4 +1,4 @@
-# Hyperliquid Trading Bot Frontend & Desktop App
+# Trading Bot Dashboard
 
 A real-time dashboard for the Hyperliquid Trading Bot, built with React, TypeScript, Vite, and Electron.
 
@@ -61,5 +61,5 @@ On the very first launch, the app automatically creates a default connection to:
 ### Persistence
 Your configured connections are saved automatically.
 *   **Web**: Saved in browser `localStorage`.
-*   **Desktop**: Saved in the application's user data directory (`~/.config/Hyperliquid Dashboard/Local Storage/` on Linux).
+*   **Desktop**: Saved in the application's user data directory (`~/.config/Trading Bot Dashboard/Local Storage/` on Linux).
 
