@@ -104,7 +104,7 @@ const OrderBook: React.FC = () => {
                     {/* Header: Size | Trades | Dist | Price (for asks, price on right near center) */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: isPerp ? '32px 60px 45px 55px 85px' : '60px 45px 55px 85px',
+                        gridTemplateColumns: isPerp ? '28px 1.2fr 0.8fr 0.9fr 1.5fr' : '1.2fr 0.8fr 0.9fr 1.5fr',
                         padding: '12px 16px',
                         fontSize: '9px',
                         color: 'var(--text-tertiary)',
@@ -115,7 +115,7 @@ const OrderBook: React.FC = () => {
                         background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.04) 0%, transparent 100%)'
                     }}>
                         {isPerp && <span></span>}
-                        <span>Size</span>
+                        <span style={{ textAlign: 'left' }}>Size</span>
                         <span style={{ textAlign: 'center' }}>Trades</span>
                         <span style={{ textAlign: 'right' }}>Dist</span>
                         <span style={{ textAlign: 'right' }}>Price</span>
@@ -212,7 +212,7 @@ const OrderBook: React.FC = () => {
                     {/* Header: Price | Dist | Trades | Size (for bids, price on left near center) */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: isPerp ? '85px 55px 45px 60px 32px' : '85px 55px 45px 60px',
+                        gridTemplateColumns: isPerp ? '1.5fr 0.9fr 0.8fr 1.2fr 28px' : '1.5fr 0.9fr 0.8fr 1.2fr',
                         padding: '12px 16px',
                         fontSize: '9px',
                         color: 'var(--text-tertiary)',
@@ -222,8 +222,8 @@ const OrderBook: React.FC = () => {
                         borderBottom: '1px solid var(--border-color)',
                         background: 'linear-gradient(270deg, rgba(34, 197, 94, 0.04) 0%, transparent 100%)'
                     }}>
-                        <span>Price</span>
-                        <span>Dist</span>
+                        <span style={{ textAlign: 'left' }}>Price</span>
+                        <span style={{ textAlign: 'left' }}>Dist</span>
                         <span style={{ textAlign: 'center' }}>Trades</span>
                         <span style={{ textAlign: 'right' }}>Size</span>
                         {isPerp && <span></span>}
@@ -330,7 +330,6 @@ const ZoneRow: React.FC<{
     const nextPrice = isAsk ? zone.lower_price : zone.upper_price;
 
     const isClose = zone.is_reduce_only;
-    const isBuy = zone.pending_side === 'Buy';
 
     // Calculate distance from current price (as percentage)
     const distancePercent = ((displayPrice - currentPrice) / currentPrice * 100);
@@ -452,8 +451,8 @@ const ZoneRow: React.FC<{
             style={{
                 display: 'grid',
                 gridTemplateColumns: isPerp
-                    ? (isAsk ? '32px 60px 45px 55px 85px' : '85px 55px 45px 60px 32px')
-                    : (isAsk ? '60px 45px 55px 85px' : '85px 55px 45px 60px'),
+                    ? (isAsk ? '28px 1.2fr 0.8fr 0.9fr 1.5fr' : '1.5fr 0.9fr 0.8fr 1.2fr 28px')
+                    : (isAsk ? '1.2fr 0.8fr 0.9fr 1.5fr' : '1.5fr 0.9fr 0.8fr 1.2fr'),
                 alignItems: 'center',
                 padding: '8px 16px',
                 fontSize: '12px',
