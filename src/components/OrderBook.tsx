@@ -149,12 +149,12 @@ const OrderBook: React.FC = () => {
 
                 {/* Center Price Column */}
                 <div style={{
-                    width: '140px',
+                    width: '120px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '20px 12px',
+                    padding: '16px 10px',
                     background: 'linear-gradient(180deg, var(--bg-base) 0%, rgba(3, 5, 8, 0.98) 100%)',
                     borderLeft: '1px solid var(--border-color)',
                     borderRight: '1px solid var(--border-color)',
@@ -163,11 +163,11 @@ const OrderBook: React.FC = () => {
                     {/* Decorative glow */}
                     <div style={{
                         position: 'absolute',
-                        width: '100px',
-                        height: '100px',
+                        width: '80px',
+                        height: '80px',
                         borderRadius: '50%',
                         background: 'var(--accent-glow)',
-                        filter: 'blur(40px)',
+                        filter: 'blur(35px)',
                         opacity: 0.4
                     }} />
 
@@ -182,11 +182,11 @@ const OrderBook: React.FC = () => {
                         Current
                     </div>
                     <div style={{
-                        fontSize: '20px',
+                        fontSize: '18px',
                         fontWeight: 700,
                         fontFamily: 'var(--font-mono)',
                         color: 'var(--text-primary)',
-                        textShadow: '0 0 30px var(--accent-glow)',
+                        textShadow: '0 0 25px var(--accent-glow)',
                         position: 'relative',
                         zIndex: 1,
                         letterSpacing: '-0.03em'
@@ -196,9 +196,9 @@ const OrderBook: React.FC = () => {
 
                     {/* Zone counts */}
                     <div style={{
-                        marginTop: '20px',
+                        marginTop: '14px',
                         display: 'flex',
-                        gap: '20px',
+                        gap: '16px',
                         position: 'relative',
                         zIndex: 1
                     }}>
@@ -349,9 +349,10 @@ const ZoneRow: React.FC<{
     const depthOpacity = zone.has_order ? 1 : 0.35;
     const rowBrightness = isNearSpread ? 1 : Math.max(0.6, 1 - (zoneIndex / totalZones) * 0.4);
 
-    // Row background based on side
+    // Row background based on side and alternating pattern
     const sideColor = isAsk ? 'rgba(239, 68, 68, 0.06)' : 'rgba(34, 197, 94, 0.06)';
-    const baseRowBg = isNearSpread ? sideColor : 'transparent';
+    const altRowBg = zoneIndex % 2 === 1 ? 'rgba(255, 255, 255, 0.015)' : 'transparent';
+    const baseRowBg = isNearSpread ? sideColor : altRowBg;
 
     // Perp position indicator
     const perpIndicator = isPerp ? (

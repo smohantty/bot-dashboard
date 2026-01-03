@@ -200,7 +200,7 @@ const ConfigCell: React.FC<{
     return (
         <div
             style={{
-                padding: '16px 18px',
+                padding: '12px 16px',
                 borderRight: isLast ? 'none' : '1px solid var(--border-color)',
                 borderBottom: '1px solid var(--border-color)',
                 background: isHovered
@@ -214,12 +214,12 @@ const ConfigCell: React.FC<{
             <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
-                fontSize: '10px',
+                gap: '6px',
+                fontSize: '9px',
                 color: 'var(--text-tertiary)',
-                marginBottom: '10px',
+                marginBottom: '6px',
                 textTransform: 'uppercase',
-                letterSpacing: '0.6px',
+                letterSpacing: '0.5px',
                 fontWeight: 500
             }}>
                 {icon && (
@@ -241,7 +241,7 @@ const ConfigCell: React.FC<{
                 )}
             </div>
             <div style={{
-                fontSize: '14px',
+                fontSize: '13px',
                 fontWeight: highlight ? 600 : 500,
                 color: highlight ? (highlightColor || 'var(--accent-primary)') : 'var(--text-primary)',
                 fontFamily: 'var(--font-mono)',
