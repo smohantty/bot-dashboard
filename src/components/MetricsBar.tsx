@@ -66,6 +66,11 @@ const MetricsBar: React.FC = () => {
     const biasBg = perpData?.grid_bias === 'Long' ? 'var(--color-buy-bg)' :
         perpData?.grid_bias === 'Short' ? 'var(--color-sell-bg)' : 'var(--accent-subtle)';
 
+    // Parse symbol to get base/quote asset names (e.g., "LIT/USDC" or "LIT_USDC")
+    const symbolParts = s.symbol.includes('/') ? s.symbol.split('/') : s.symbol.split('_');
+    const baseAsset = symbolParts[0] || s.symbol;
+    const quoteAsset = symbolParts[1] || 'USD';
+
     // Format helpers
     const formatPrice = (price: number) => `$${price.toFixed(pxDecimals)}`;
     const formatSize = (size: number) => size.toFixed(szDecimals);
@@ -232,6 +237,12 @@ const MetricsBar: React.FC = () => {
                             label="Avg Entry"
                             value={formatPrice(s.avg_entry_price)}
                         />
+                        {s.initial_entry_price && (
+                            <MetricCellCompact
+                                label="Start Entry"
+                                value={formatPrice(s.initial_entry_price)}
+                            />
+                        )}
                         <MetricCellCompact
                             label="Roundtrips"
                             value={s.roundtrips.toString()}
@@ -242,18 +253,23 @@ const MetricsBar: React.FC = () => {
                     // Spot Grid Row 2
                     <>
                         <MetricCellCompact
-                            label="Base Balance"
+                            label={baseAsset}
                             value={formatSize(spotData?.base_balance || 0)}
-                            subValue={s.symbol.split('/')[0] || s.symbol.split('_')[0]}
                         />
                         <MetricCellCompact
-                            label="Quote Balance"
+                            label={quoteAsset}
                             value={formatUsd(spotData?.quote_balance || 0)}
                         />
                         <MetricCellCompact
                             label="Avg Entry"
                             value={formatPrice(s.avg_entry_price)}
                         />
+                        {s.initial_entry_price && (
+                            <MetricCellCompact
+                                label="Start Entry"
+                                value={formatPrice(s.initial_entry_price)}
+                            />
+                        )}
                         <MetricCellCompact
                             label="Roundtrips"
                             value={s.roundtrips.toString()}
