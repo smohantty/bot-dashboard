@@ -24,6 +24,9 @@
     },
     {
       "$ref": "#/definitions/ErrorEvent"
+    },
+    {
+      "$ref": "#/definitions/InfoEvent"
     }
   ],
   "definitions": {
@@ -125,6 +128,21 @@
         },
         "data": {
           "type": "string"
+        }
+      },
+      "required": [
+        "event_type",
+        "data"
+      ]
+    },
+    "InfoEvent": {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "info"
+        },
+        "data": {
+          "$ref": "#/definitions/SystemInfo"
         }
       },
       "required": [
@@ -498,7 +516,6 @@
         "pending_side",
         "has_order",
         "is_reduce_only",
-        "action_label",
         "action_type",
         "entry_price",
         "roundtrip_count"
@@ -529,10 +546,6 @@
         "is_reduce_only": {
           "type": "boolean",
           "description": "true for closing orders in perp"
-        },
-        "action_label": {
-          "type": "string",
-          "description": "Human-readable action: Buy, Sell, Open Long, Close Long, Open Short, Close Short"
         },
         "action_type": {
           "type": "string",
