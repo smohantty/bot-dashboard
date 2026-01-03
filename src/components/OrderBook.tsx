@@ -101,10 +101,10 @@ const OrderBook: React.FC = () => {
             <div style={{ display: 'flex', minHeight: '280px' }}>
                 {/* Asks Side */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    {/* Header: Action | Trades | Size | Dist | Price */}
+                    {/* Header: Size | Trades | Dist | Price (for asks, price on right near center) */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: '80px 50px 70px 60px 1fr',
+                        gridTemplateColumns: isPerp ? '32px 60px 45px 55px 85px' : '60px 45px 55px 85px',
                         padding: '12px 16px',
                         fontSize: '9px',
                         color: 'var(--text-tertiary)',
@@ -114,9 +114,9 @@ const OrderBook: React.FC = () => {
                         borderBottom: '1px solid var(--border-color)',
                         background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.04) 0%, transparent 100%)'
                     }}>
-                        <span>Action</span>
+                        {isPerp && <span></span>}
+                        <span>Size</span>
                         <span style={{ textAlign: 'center' }}>Trades</span>
-                        <span style={{ textAlign: 'center' }}>Size</span>
                         <span style={{ textAlign: 'right' }}>Dist</span>
                         <span style={{ textAlign: 'right' }}>Price</span>
                     </div>
@@ -149,32 +149,32 @@ const OrderBook: React.FC = () => {
 
                 {/* Center Price Column */}
                 <div style={{
-                    width: '160px',
+                    width: '140px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '24px 16px',
+                    padding: '20px 12px',
                     background: 'linear-gradient(180deg, var(--bg-base) 0%, rgba(3, 5, 8, 0.98) 100%)',
                     borderLeft: '1px solid var(--border-color)',
                     borderRight: '1px solid var(--border-color)',
                     position: 'relative'
                 }}>
-                    {/* Decorative glow - more intense */}
+                    {/* Decorative glow */}
                     <div style={{
                         position: 'absolute',
-                        width: '120px',
-                        height: '120px',
+                        width: '100px',
+                        height: '100px',
                         borderRadius: '50%',
                         background: 'var(--accent-glow)',
-                        filter: 'blur(50px)',
-                        opacity: 0.5
+                        filter: 'blur(40px)',
+                        opacity: 0.4
                     }} />
 
                     <div style={{
                         fontSize: '9px',
                         color: 'var(--text-tertiary)',
-                        marginBottom: '10px',
+                        marginBottom: '8px',
                         textTransform: 'uppercase',
                         letterSpacing: '1.2px',
                         fontWeight: 600
@@ -182,7 +182,7 @@ const OrderBook: React.FC = () => {
                         Current
                     </div>
                     <div style={{
-                        fontSize: '22px',
+                        fontSize: '20px',
                         fontWeight: 700,
                         fontFamily: 'var(--font-mono)',
                         color: 'var(--text-primary)',
@@ -194,11 +194,11 @@ const OrderBook: React.FC = () => {
                         ${lastPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
 
-                    {/* Zone counts with visual bars */}
+                    {/* Zone counts */}
                     <div style={{
-                        marginTop: '24px',
+                        marginTop: '20px',
                         display: 'flex',
-                        gap: '24px',
+                        gap: '20px',
                         position: 'relative',
                         zIndex: 1
                     }}>
@@ -209,10 +209,10 @@ const OrderBook: React.FC = () => {
 
                 {/* Bids Side */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    {/* Header: Price | Dist | Size | Trades | Action */}
+                    {/* Header: Price | Dist | Trades | Size (for bids, price on left near center) */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: '1fr 60px 70px 50px 80px',
+                        gridTemplateColumns: isPerp ? '85px 55px 45px 60px 32px' : '85px 55px 45px 60px',
                         padding: '12px 16px',
                         fontSize: '9px',
                         color: 'var(--text-tertiary)',
@@ -224,9 +224,9 @@ const OrderBook: React.FC = () => {
                     }}>
                         <span>Price</span>
                         <span>Dist</span>
-                        <span style={{ textAlign: 'center' }}>Size</span>
                         <span style={{ textAlign: 'center' }}>Trades</span>
-                        <span style={{ textAlign: 'right' }}>Action</span>
+                        <span style={{ textAlign: 'right' }}>Size</span>
+                        {isPerp && <span></span>}
                     </div>
                     <div style={{
                         flex: 1,
@@ -262,7 +262,7 @@ const ZoneCounter: React.FC<{ label: string; count: number; color: string }> = (
         <div style={{
             color: color,
             fontWeight: 700,
-            fontSize: '20px',
+            fontSize: '18px',
             fontFamily: 'var(--font-mono)',
             textShadow: `0 0 16px ${color}50`,
             letterSpacing: '-0.02em'
@@ -330,14 +330,7 @@ const ZoneRow: React.FC<{
     const nextPrice = isAsk ? zone.lower_price : zone.upper_price;
 
     const isClose = zone.is_reduce_only;
-    const actionColor = isClose ? 'var(--color-warning)' :
-        zone.pending_side === 'Buy' ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)';
-
-    const displayLabel = !isPerp
-        ? zone.pending_side
-        : isClose
-            ? (zone.pending_side === 'Buy' ? 'Buy (Close)' : 'Sell (Close)')
-            : (zone.pending_side === 'Buy' ? 'Buy (Open)' : 'Sell (Open)');
+    const isBuy = zone.pending_side === 'Buy';
 
     // Calculate distance from current price (as percentage)
     const distancePercent = ((displayPrice - currentPrice) / currentPrice * 100);
@@ -357,28 +350,42 @@ const ZoneRow: React.FC<{
     const depthOpacity = zone.has_order ? 1 : 0.35;
     const rowBrightness = isNearSpread ? 1 : Math.max(0.6, 1 - (zoneIndex / totalZones) * 0.4);
 
-    const actionBadge = (
-        <span style={{
-            background: `${actionColor}18`,
-            border: `1px solid ${actionColor}35`,
-            color: actionColor,
-            padding: '4px 8px',
-            borderRadius: 'var(--radius-sm)',
-            fontSize: '9px',
-            fontWeight: 600,
-            letterSpacing: '0.3px',
-            whiteSpace: 'nowrap'
-        }}>
-            {displayLabel}
-        </span>
-    );
+    // Row background based on side
+    const sideColor = isAsk ? 'rgba(239, 68, 68, 0.06)' : 'rgba(34, 197, 94, 0.06)';
+    const baseRowBg = isNearSpread ? sideColor : 'transparent';
+
+    // Perp position indicator
+    const perpIndicator = isPerp ? (
+        <Tooltip content={isClose ? 'Close Position (Reduce Only)' : 'Open Position'}>
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '24px',
+                height: '20px',
+                borderRadius: '4px',
+                background: isClose ? 'rgba(245, 158, 11, 0.15)' : 'rgba(100, 116, 139, 0.15)',
+                border: `1px solid ${isClose ? 'rgba(245, 158, 11, 0.3)' : 'rgba(100, 116, 139, 0.2)'}`,
+                cursor: 'help'
+            }}>
+                <span style={{
+                    fontSize: '9px',
+                    fontWeight: 700,
+                    color: isClose ? 'var(--color-warning)' : 'var(--text-tertiary)',
+                    letterSpacing: '-0.02em'
+                }}>
+                    {isClose ? 'C' : 'O'}
+                </span>
+            </div>
+        </Tooltip>
+    ) : null;
 
     const priceDisplay = (
         <div style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: isAsk ? 'flex-end' : 'flex-start',
-            gap: '2px'
+            gap: '1px'
         }}>
             <span style={{
                 color: isAsk ? 'var(--color-sell-bright)' : 'var(--color-buy-bright)',
@@ -395,7 +402,7 @@ const ZoneRow: React.FC<{
                     color: 'var(--text-muted)',
                     fontFamily: 'var(--font-mono)',
                     cursor: 'help',
-                    fontSize: '10px',
+                    fontSize: '9px',
                     letterSpacing: '-0.02em'
                 }}>
                     {nextPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}
@@ -404,17 +411,51 @@ const ZoneRow: React.FC<{
         </div>
     );
 
-    const baseRowBg = isNearSpread
-        ? (isAsk ? 'rgba(239, 68, 68, 0.04)' : 'rgba(34, 197, 94, 0.04)')
-        : 'transparent';
+    const sizeCell = (
+        <span style={{
+            fontFamily: 'var(--font-mono)',
+            color: 'var(--text-secondary)',
+            fontSize: '11px',
+            letterSpacing: '-0.02em'
+        }}>
+            {zone.size.toFixed(szDecimals)}
+        </span>
+    );
+
+    const tradesCell = (
+        <span style={{
+            textAlign: 'center',
+            fontFamily: 'var(--font-mono)',
+            color: zone.roundtrip_count > 0 ? 'var(--accent-primary)' : 'var(--text-muted)',
+            fontSize: '11px',
+            fontWeight: zone.roundtrip_count > 0 ? 600 : 400,
+            textShadow: zone.roundtrip_count > 0 ? '0 0 10px var(--accent-glow)' : 'none'
+        }}>
+            {zone.roundtrip_count}
+        </span>
+    );
+
+    const distCell = (
+        <span style={{
+            fontFamily: 'var(--font-mono)',
+            color: distanceColor,
+            fontSize: '10px',
+            fontWeight: 500,
+            letterSpacing: '-0.02em'
+        }}>
+            {distanceDisplay}
+        </span>
+    );
 
     return (
         <div
             style={{
                 display: 'grid',
-                gridTemplateColumns: isAsk ? '80px 50px 70px 60px 1fr' : '1fr 60px 70px 50px 80px',
+                gridTemplateColumns: isPerp
+                    ? (isAsk ? '32px 60px 45px 55px 85px' : '85px 55px 45px 60px 32px')
+                    : (isAsk ? '60px 45px 55px 85px' : '85px 55px 45px 60px'),
                 alignItems: 'center',
-                padding: '10px 16px',
+                padding: '8px 16px',
                 fontSize: '12px',
                 opacity: depthOpacity * rowBrightness,
                 borderBottom: '1px solid var(--border-color)',
@@ -425,73 +466,22 @@ const ZoneRow: React.FC<{
             onMouseLeave={() => setIsHovered(false)}
         >
             {isAsk ? (
-                // Asks: Action | Trades | Size | Dist | Price
+                // Asks: [Perp?] Size | Trades | Dist | Price
                 <>
-                    <div>{actionBadge}</div>
-                    <span style={{
-                        textAlign: 'center',
-                        fontFamily: 'var(--font-mono)',
-                        color: zone.roundtrip_count > 0 ? 'var(--accent-primary)' : 'var(--text-muted)',
-                        fontSize: '11px',
-                        fontWeight: zone.roundtrip_count > 0 ? 600 : 400,
-                        textShadow: zone.roundtrip_count > 0 ? '0 0 10px var(--accent-glow)' : 'none'
-                    }}>
-                        {zone.roundtrip_count}
-                    </span>
-                    <span style={{
-                        textAlign: 'center',
-                        fontFamily: 'var(--font-mono)',
-                        color: 'var(--text-secondary)',
-                        fontSize: '11px',
-                        letterSpacing: '-0.02em'
-                    }}>
-                        {zone.size.toFixed(szDecimals)}
-                    </span>
-                    <span style={{
-                        textAlign: 'right',
-                        fontFamily: 'var(--font-mono)',
-                        color: distanceColor,
-                        fontSize: '10px',
-                        fontWeight: 500,
-                        letterSpacing: '-0.02em'
-                    }}>
-                        {distanceDisplay}
-                    </span>
+                    {isPerp && <div>{perpIndicator}</div>}
+                    <div>{sizeCell}</div>
+                    <div style={{ textAlign: 'center' }}>{tradesCell}</div>
+                    <div style={{ textAlign: 'right' }}>{distCell}</div>
                     <div style={{ textAlign: 'right' }}>{priceDisplay}</div>
                 </>
             ) : (
-                // Bids: Price | Dist | Size | Trades | Action
+                // Bids: Price | Dist | Trades | Size [Perp?]
                 <>
                     <div>{priceDisplay}</div>
-                    <span style={{
-                        fontFamily: 'var(--font-mono)',
-                        color: distanceColor,
-                        fontSize: '10px',
-                        fontWeight: 500,
-                        letterSpacing: '-0.02em'
-                    }}>
-                        {distanceDisplay}
-                    </span>
-                    <span style={{
-                        textAlign: 'center',
-                        fontFamily: 'var(--font-mono)',
-                        color: 'var(--text-secondary)',
-                        fontSize: '11px',
-                        letterSpacing: '-0.02em'
-                    }}>
-                        {zone.size.toFixed(szDecimals)}
-                    </span>
-                    <span style={{
-                        textAlign: 'center',
-                        fontFamily: 'var(--font-mono)',
-                        color: zone.roundtrip_count > 0 ? 'var(--accent-primary)' : 'var(--text-muted)',
-                        fontSize: '11px',
-                        fontWeight: zone.roundtrip_count > 0 ? 600 : 400,
-                        textShadow: zone.roundtrip_count > 0 ? '0 0 10px var(--accent-glow)' : 'none'
-                    }}>
-                        {zone.roundtrip_count}
-                    </span>
-                    <div style={{ textAlign: 'right' }}>{actionBadge}</div>
+                    <div>{distCell}</div>
+                    <div style={{ textAlign: 'center' }}>{tradesCell}</div>
+                    <div style={{ textAlign: 'right' }}>{sizeCell}</div>
+                    {isPerp && <div style={{ textAlign: 'right' }}>{perpIndicator}</div>}
                 </>
             )}
         </div>
