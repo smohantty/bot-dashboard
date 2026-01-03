@@ -177,6 +177,14 @@
                 "number",
                 "null"
               ]
+            },
+            "sz_decimals": {
+              "type": "integer",
+              "description": "Number of decimal places for size formatting (from market info)"
+            },
+            "px_decimals": {
+              "type": "integer",
+              "description": "Number of decimal places for price formatting (from market info)"
             }
           }
         },
@@ -240,6 +248,14 @@
                 "number",
                 "null"
               ]
+            },
+            "sz_decimals": {
+              "type": "integer",
+              "description": "Number of decimal places for size formatting (from market info)"
+            },
+            "px_decimals": {
+              "type": "integer",
+              "description": "Number of decimal places for price formatting (from market info)"
             }
           }
         }
