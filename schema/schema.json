@@ -339,6 +339,12 @@
         },
         "quote_balance": {
           "type": "number"
+        },
+        "initial_entry_price": {
+          "type": [
+            "number",
+            "null"
+          ]
         }
       }
     },
@@ -436,6 +442,12 @@
         },
         "margin_balance": {
           "type": "number"
+        },
+        "initial_entry_price": {
+          "type": [
+            "number",
+            "null"
+          ]
         }
       }
     },
