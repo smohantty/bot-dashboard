@@ -11,7 +11,8 @@ The goal is to maintain a consistent data structure across:
 
 ## Files
 
-- **`schema.ts`**: TypeScript definitions. This is the primary reference for the frontend.
+- **`schema.json`**: JSON Schema definition. This is the **primary source of truth**. All other files should stay in sync with this validation schema.
+- **`schema.ts`**: TypeScript definitions. References `schema.json` structure for the frontend.
 - **`types.rs`**: Rust definitions. Ensure the Hyperliquid bot's broadcast module matches these structures.
 - **`types.py`**: Python definitions. Ensure the Lighter bot's broadcast module matches these structures.
 

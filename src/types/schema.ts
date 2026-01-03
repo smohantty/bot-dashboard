@@ -20,6 +20,7 @@ export interface StrategyConfig {
 
 export interface SystemInfo {
     network: string;
+    exchange: 'hyperliquid' | 'lighter';
 }
 
 // ============================================================

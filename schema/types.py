@@ -5,6 +5,7 @@ from src.strategy.types import SpotGridSummary, PerpGridSummary, GridState
 @dataclass
 class SystemInfo:
     network: str
+    exchange: str
 
 @dataclass
 class OrderEvent:

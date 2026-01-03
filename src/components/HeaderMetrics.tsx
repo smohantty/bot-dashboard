@@ -47,12 +47,26 @@ const HeaderMetrics: React.FC = () => {
         color: systemInfo.network === 'mainnet' ? 'var(--accent-primary)' : 'var(--color-sell)'
     } : null;
 
+    const exchangeName = systemInfo?.exchange ? systemInfo.exchange.toUpperCase() : 'BOT';
+
     if (!summary) {
         return (
             <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
                 Waiting for strategy data...
                 {networkBadge && (
-                    <div style={{ marginTop: '0.5rem' }}>
+                    <div style={{ marginTop: '0.5rem', display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                        <span style={{
+                            background: '#333',
+                            color: '#fff',
+                            border: '1px solid #555',
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            fontSize: '0.8rem',
+                            fontWeight: 'bold',
+                            textTransform: 'uppercase'
+                        }}>
+                            {systemInfo?.exchange || 'UNKNOWN'}
+                        </span>
                         <span style={{
                             background: networkBadge.color,
                             color: '#000',
@@ -83,7 +97,7 @@ const HeaderMetrics: React.FC = () => {
                     label="MARKET PRICE"
                     value={`$${s.price.toFixed(4)}`}
                     color="var(--accent-primary)"
-                    subValue={`${s.symbol} • ${timeStr}`}
+                    subValue={`${s.symbol} • ${exchangeName} • ${timeStr}`}
                     badge={networkBadge || { text: 'SPOT', color: 'var(--accent-primary)' }}
                 />
                 <MetricCard
@@ -127,7 +141,7 @@ const HeaderMetrics: React.FC = () => {
                 label="MARKET PRICE"
                 value={`$${s.price.toFixed(4)}`}
                 color="var(--accent-primary)"
-                subValue={`${s.symbol} • ${timeStr}`}
+                subValue={`${s.symbol} • ${exchangeName} • ${timeStr}`}
                 badge={networkBadge || { text: `PERP ${s.leverage}x`, color: biasColor }}
             />
             <MetricCard
