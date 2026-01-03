@@ -244,9 +244,10 @@ const MetricsBar: React.FC = () => {
                             />
                         )}
                         <MetricCellCompact
-                            label="Roundtrips"
+                            label="Matched"
                             value={s.roundtrips.toString()}
                             valueColor="var(--accent-primary)"
+                            highlight
                         />
                     </>
                 ) : (
@@ -271,9 +272,10 @@ const MetricsBar: React.FC = () => {
                             />
                         )}
                         <MetricCellCompact
-                            label="Roundtrips"
+                            label="Matched"
                             value={s.roundtrips.toString()}
                             valueColor="var(--accent-primary)"
+                            highlight
                         />
                     </>
                 )}
@@ -329,29 +331,33 @@ const MetricCellCompact: React.FC<{
     value: string;
     subValue?: string;
     valueColor?: string;
-}> = ({ label, value, subValue, valueColor }) => (
+    highlight?: boolean;
+}> = ({ label, value, subValue, valueColor, highlight }) => (
     <div style={{
         padding: '4px 20px',
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        borderRight: '1px solid var(--border-subtle)'
+        borderRight: '1px solid var(--border-subtle)',
+        background: highlight ? 'rgba(0, 245, 212, 0.05)' : 'transparent',
+        borderRadius: highlight ? 'var(--radius-sm)' : undefined
     }}>
         <span style={{
             fontSize: '9px',
-            color: 'var(--text-tertiary)',
+            color: highlight ? 'var(--accent-primary)' : 'var(--text-tertiary)',
             textTransform: 'uppercase',
             letterSpacing: '0.3px',
-            fontWeight: 500
+            fontWeight: highlight ? 600 : 500
         }}>
             {label}
         </span>
         <span style={{
-            fontSize: '12px',
-            fontWeight: 600,
+            fontSize: highlight ? '14px' : '12px',
+            fontWeight: 700,
             color: valueColor || 'var(--text-primary)',
             fontFamily: 'var(--font-mono)',
-            letterSpacing: '-0.02em'
+            letterSpacing: '-0.02em',
+            textShadow: highlight ? `0 0 15px ${valueColor || 'var(--accent-primary)'}60` : 'none'
         }}>
             {value}
         </span>
