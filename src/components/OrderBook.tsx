@@ -103,9 +103,9 @@ const OrderBook: React.FC = () => {
 
             {/* CLOB Layout - Prices meet in the middle */}
             <div style={{ display: 'flex', minHeight: '280px' }}>
-                {/* Asks Side */}
+                {/* Bids Side */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    {/* Header: Size | Trades | Dist | Price (for asks, price on right near center) */}
+                    {/* Header: Size | Trades | Dist | Price (for bids, price on right near center) */}
                     <div style={{
                         display: 'grid',
                         gridTemplateColumns: isPerp ? '28px 1.2fr 0.8fr 0.9fr 1.5fr' : '1.2fr 0.8fr 0.9fr 1.5fr',
@@ -115,7 +115,7 @@ const OrderBook: React.FC = () => {
                         letterSpacing: '0.6px',
                         fontWeight: 600,
                         borderBottom: '1px solid var(--border-color)',
-                        background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.04) 0%, transparent 100%)'
+                        background: 'linear-gradient(90deg, rgba(34, 197, 94, 0.04) 0%, transparent 100%)'
                     }}>
                         {isPerp && <span></span>}
                         <span style={{ textAlign: 'left' }}>Size</span>
@@ -130,20 +130,20 @@ const OrderBook: React.FC = () => {
                         display: 'flex',
                         flexDirection: 'column'
                     }}>
-                        {asks.length === 0 ? (
-                            <EmptyState side="asks" />
+                        {bids.length === 0 ? (
+                            <EmptyState side="bids" />
                         ) : (
-                            asks.map((zone, idx) => (
+                            bids.map((zone, idx) => (
                                 <ZoneRow
                                     key={zone.index}
                                     zone={zone}
-                                    side="ask"
+                                    side="bid"
                                     szDecimals={szDecimals}
                                     pxDecimals={pxDecimals}
                                     currentPrice={lastPrice}
                                     isNearSpread={idx === 0}
                                     isPerp={isPerp}
-                                    totalZones={asks.length}
+                                    totalZones={bids.length}
                                     zoneIndex={idx}
                                 />
                             ))
@@ -179,8 +179,7 @@ const OrderBook: React.FC = () => {
                         fontSize: '9px',
                         color: 'var(--text-tertiary)',
                         marginBottom: '8px',
-                        textTransform: 'uppercase',
-                        letterSpacing: '1.2px',
+                        letterSpacing: '0.8px',
                         fontWeight: 600
                     }}>
                         Current
@@ -206,14 +205,14 @@ const OrderBook: React.FC = () => {
                         position: 'relative',
                         zIndex: 1
                     }}>
-                        <ZoneCounter label="Asks" count={asks.length} color="var(--color-sell-bright)" />
                         <ZoneCounter label="Bids" count={bids.length} color="var(--color-buy-bright)" />
+                        <ZoneCounter label="Asks" count={asks.length} color="var(--color-sell-bright)" />
                     </div>
                 </div>
 
-                {/* Bids Side */}
+                {/* Asks Side */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    {/* Header: Price | Dist | Trades | Size (for bids, price on left near center) */}
+                    {/* Header: Price | Dist | Trades | Size (for asks, price on left near center) */}
                     <div style={{
                         display: 'grid',
                         gridTemplateColumns: isPerp ? '1.5fr 0.9fr 0.8fr 1.2fr 28px' : '1.5fr 0.9fr 0.8fr 1.2fr',
@@ -223,7 +222,7 @@ const OrderBook: React.FC = () => {
                         letterSpacing: '0.6px',
                         fontWeight: 600,
                         borderBottom: '1px solid var(--border-color)',
-                        background: 'linear-gradient(270deg, rgba(34, 197, 94, 0.04) 0%, transparent 100%)'
+                        background: 'linear-gradient(270deg, rgba(239, 68, 68, 0.04) 0%, transparent 100%)'
                     }}>
                         <span style={{ textAlign: 'left' }}>Price</span>
                         <span style={{ textAlign: 'left' }}>Dist</span>
@@ -236,20 +235,20 @@ const OrderBook: React.FC = () => {
                         overflowY: 'auto',
                         maxHeight: '240px'
                     }}>
-                        {bids.length === 0 ? (
-                            <EmptyState side="bids" />
+                        {asks.length === 0 ? (
+                            <EmptyState side="asks" />
                         ) : (
-                            bids.map((zone, idx) => (
+                            asks.map((zone, idx) => (
                                 <ZoneRow
                                     key={zone.index}
                                     zone={zone}
-                                    side="bid"
+                                    side="ask"
                                     szDecimals={szDecimals}
                                     pxDecimals={pxDecimals}
                                     currentPrice={lastPrice}
                                     isNearSpread={idx === 0}
                                     isPerp={isPerp}
-                                    totalZones={bids.length}
+                                    totalZones={asks.length}
                                     zoneIndex={idx}
                                 />
                             ))
