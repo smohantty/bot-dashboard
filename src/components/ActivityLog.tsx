@@ -67,8 +67,8 @@ const ActivityLog: React.FC = () => {
                     alignItems: 'center'
                 }}>
                     <span>Order</span>
-                    <span style={{ textAlign: 'right' }}>Size</span>
                     <span style={{ textAlign: 'right' }}>Price</span>
+                    <span style={{ textAlign: 'right' }}>Size</span>
                     <span style={{ textAlign: 'right' }}>Fee</span>
                 </div>
             )}
@@ -232,7 +232,7 @@ const OrderEventRow: React.FC<{
                 </span>
             </div>
 
-            {/* Size */}
+            {/* Price (Primary Emphasis) */}
             <span style={{
                 fontFamily: 'var(--font-mono)',
                 color: 'var(--text-primary)',
@@ -240,17 +240,17 @@ const OrderEventRow: React.FC<{
                 textAlign: 'right',
                 letterSpacing: '-0.02em'
             }}>
-                {order.size.toFixed(szDecimals)}
+                ${order.price.toFixed(pxDecimals)}
             </span>
 
-            {/* Price */}
+            {/* Size (Secondary Emphasis) */}
             <span style={{
                 color: 'var(--text-secondary)',
                 fontFamily: 'var(--font-mono)',
                 textAlign: 'right',
                 letterSpacing: '-0.02em'
             }}>
-                ${order.price.toFixed(pxDecimals)}
+                {order.size.toFixed(szDecimals)}
             </span>
 
             {/* Fee */}
