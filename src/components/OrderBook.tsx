@@ -456,8 +456,8 @@ const ZoneRow: React.FC<{
             style={{
                 display: 'grid',
                 gridTemplateColumns: isPerp
-                    ? (isAsk ? '28px 1.2fr 0.8fr 0.9fr 1.5fr' : '1.5fr 0.9fr 0.8fr 1.2fr 28px')
-                    : (isAsk ? '1.2fr 0.8fr 0.9fr 1.5fr' : '1.5fr 0.9fr 0.8fr 1.2fr'),
+                    ? (isAsk ? '1.5fr 0.9fr 0.8fr 1.2fr 28px' : '28px 1.2fr 0.8fr 0.9fr 1.5fr')
+                    : (isAsk ? '1.5fr 0.9fr 0.8fr 1.2fr' : '1.2fr 0.8fr 0.9fr 1.5fr'),
                 alignItems: 'center',
                 padding: '8px 16px',
                 fontSize: '12px',
@@ -470,22 +470,22 @@ const ZoneRow: React.FC<{
             onMouseLeave={() => setIsHovered(false)}
         >
             {isAsk ? (
-                // Asks: [Perp?] Size | Trades | Dist | Price
-                <>
-                    {isPerp && <div>{perpIndicator}</div>}
-                    <div>{sizeCell}</div>
-                    <div style={{ textAlign: 'center' }}>{tradesCell}</div>
-                    <div style={{ textAlign: 'right' }}>{distCell}</div>
-                    <div style={{ textAlign: 'right' }}>{priceDisplay}</div>
-                </>
-            ) : (
-                // Bids: Price | Dist | Trades | Size [Perp?]
+                // Asks (Right): Price | Dist | Trades | Size [Perp?]
                 <>
                     <div>{priceDisplay}</div>
                     <div>{distCell}</div>
                     <div style={{ textAlign: 'center' }}>{tradesCell}</div>
                     <div style={{ textAlign: 'right' }}>{sizeCell}</div>
                     {isPerp && <div style={{ textAlign: 'right' }}>{perpIndicator}</div>}
+                </>
+            ) : (
+                // Bids (Left): [Perp?] Size | Trades | Dist | Price
+                <>
+                    {isPerp && <div>{perpIndicator}</div>}
+                    <div>{sizeCell}</div>
+                    <div style={{ textAlign: 'center' }}>{tradesCell}</div>
+                    <div style={{ textAlign: 'right' }}>{distCell}</div>
+                    <div style={{ textAlign: 'right' }}>{priceDisplay}</div>
                 </>
             )}
         </div>
