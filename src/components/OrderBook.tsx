@@ -6,7 +6,8 @@ import Tooltip from './Tooltip';
 const OrderBook: React.FC = () => {
     const { gridState, lastPrice, config } = useBotStore();
 
-    const szDecimals = config?.sz_decimals || 4;
+    const szDecimals = config?.sz_decimals ?? 4;
+    const pxDecimals = config?.px_decimals ?? 2;
 
     const { asks, bids } = useMemo(() => {
         if (!gridState || !lastPrice) return { asks: [], bids: [] };
@@ -55,6 +56,9 @@ const OrderBook: React.FC = () => {
     const spread = bestAsk && bestBid
         ? ((bestAsk.upper_price - bestBid.lower_price) / lastPrice * 100).toFixed(3)
         : null;
+
+    // Helper to format price consistently
+    const formatPrice = (price: number) => price.toFixed(pxDecimals);
 
     return (
         <div className="card" style={{
@@ -136,6 +140,7 @@ const OrderBook: React.FC = () => {
                                     zone={zone}
                                     side="ask"
                                     szDecimals={szDecimals}
+                                    pxDecimals={pxDecimals}
                                     currentPrice={lastPrice}
                                     isNearSpread={idx === 0}
                                     isPerp={isPerp}
@@ -191,7 +196,7 @@ const OrderBook: React.FC = () => {
                         zIndex: 1,
                         letterSpacing: '-0.03em'
                     }}>
-                        ${lastPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        ${formatPrice(lastPrice)}
                     </div>
 
                     {/* Zone counts */}
@@ -242,6 +247,7 @@ const OrderBook: React.FC = () => {
                                     zone={zone}
                                     side="bid"
                                     szDecimals={szDecimals}
+                                    pxDecimals={pxDecimals}
                                     currentPrice={lastPrice}
                                     isNearSpread={idx === 0}
                                     isPerp={isPerp}
@@ -318,12 +324,13 @@ const ZoneRow: React.FC<{
     zone: ZoneInfo;
     side: 'ask' | 'bid';
     szDecimals: number;
+    pxDecimals: number;
     currentPrice: number;
     isNearSpread?: boolean;
     isPerp: boolean;
     totalZones: number;
     zoneIndex: number;
-}> = ({ zone, side, szDecimals, currentPrice, isNearSpread, isPerp, totalZones, zoneIndex }) => {
+}> = ({ zone, side, szDecimals, pxDecimals, currentPrice, isNearSpread, isPerp, totalZones, zoneIndex }) => {
     const [isHovered, setIsHovered] = React.useState(false);
     const isAsk = side === 'ask';
     const displayPrice = isAsk ? zone.upper_price : zone.lower_price;
@@ -395,7 +402,7 @@ const ZoneRow: React.FC<{
                 letterSpacing: '-0.02em',
                 textShadow: isNearSpread ? `0 0 12px ${isAsk ? 'var(--color-sell-glow)' : 'var(--color-buy-glow)'}` : 'none'
             }}>
-                {displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                {displayPrice.toFixed(pxDecimals)}
             </span>
             <Tooltip content="Next Order Price (Ping-Pong)">
                 <span style={{
@@ -405,7 +412,7 @@ const ZoneRow: React.FC<{
                     fontSize: '9px',
                     letterSpacing: '-0.02em'
                 }}>
-                    {nextPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    {nextPrice.toFixed(pxDecimals)}
                 </span>
             </Tooltip>
         </div>

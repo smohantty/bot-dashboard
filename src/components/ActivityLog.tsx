@@ -4,7 +4,8 @@ import type { OrderEvent } from '../types/schema';
 
 const ActivityLog: React.FC = () => {
     const { orderHistory, config } = useBotStore();
-    const szDecimals = config?.sz_decimals || 4;
+    const szDecimals = config?.sz_decimals ?? 4;
+    const pxDecimals = config?.px_decimals ?? 2;
     const scrollRef = useRef<HTMLDivElement>(null);
 
     // Auto-scroll to top on new orders
@@ -130,6 +131,7 @@ const ActivityLog: React.FC = () => {
                             key={`${order.cloid || order.oid}-${idx}`}
                             order={order}
                             szDecimals={szDecimals}
+                            pxDecimals={pxDecimals}
                             isFirst={idx === 0}
                             isOdd={idx % 2 === 1}
                         />
@@ -143,9 +145,10 @@ const ActivityLog: React.FC = () => {
 const OrderEventRow: React.FC<{
     order: OrderEvent;
     szDecimals: number;
+    pxDecimals: number;
     isFirst?: boolean;
     isOdd?: boolean;
-}> = ({ order, szDecimals, isFirst, isOdd }) => {
+}> = ({ order, szDecimals, pxDecimals, isFirst, isOdd }) => {
     const [isHovered, setIsHovered] = React.useState(false);
     const isBuy = order.side === 'Buy';
 
@@ -246,7 +249,7 @@ const OrderEventRow: React.FC<{
                 textAlign: 'right',
                 letterSpacing: '-0.02em'
             }}>
-                ${order.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                ${order.price.toFixed(pxDecimals)}
             </span>
 
             {/* Fee */}
@@ -256,7 +259,7 @@ const OrderEventRow: React.FC<{
                 textAlign: 'right',
                 letterSpacing: '-0.02em'
             }}>
-                {isFilled && order.fee > 0 ? `-$${order.fee.toFixed(4)}` : '--'}
+                {isFilled && order.fee > 0 ? `-$${order.fee.toFixed(2)}` : '--'}
             </span>
         </div>
     );
