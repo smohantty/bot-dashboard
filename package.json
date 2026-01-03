@@ -37,7 +37,7 @@
   },
   "build": {
     "appId": "com.tradingbot.dashboard",
-    "productName": "Trading Bot Dashboard",
+    "productName": "Trading-Bot-Dashboard",
     "files": [
       "dist/**/*",
       "electron/**/*",

@@ -61,5 +61,5 @@ On the very first launch, the app automatically creates a default connection to:
 ### Persistence
 Your configured connections are saved automatically.
 *   **Web**: Saved in browser `localStorage`.
-*   **Desktop**: Saved in the application's user data directory (`~/.config/Trading Bot Dashboard/Local Storage/` on Linux).
+*   **Desktop**: Saved in the application's user data directory (`~/.config/Trading-Bot-Dashboard/Local Storage/` on Linux).
 
