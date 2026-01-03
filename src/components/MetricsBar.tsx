@@ -7,7 +7,7 @@ import Tooltip from './Tooltip';
  * Designed to sit at the top of the dashboard
  */
 const MetricsBar: React.FC = () => {
-    const { summary, lastTickTime, connectionStatus, config } = useBotStore();
+    const { summary, connectionStatus, config } = useBotStore();
 
     // Get decimals from config for consistent formatting
     const szDecimals = config?.sz_decimals ?? 4;
@@ -32,13 +32,11 @@ const MetricsBar: React.FC = () => {
         );
     }
 
-    const timeStr = lastTickTime ? new Date(lastTickTime).toLocaleTimeString() : '--:--:--';
     const isPerp = summary.type === 'perp_grid';
     const s = summary.data;
 
     const totalPnl = s.realized_pnl + s.unrealized_pnl - s.total_fees;
     const pnlColor = totalPnl >= 0 ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)';
-    const pnlSign = totalPnl >= 0 ? '+' : '';
 
     const perpData = isPerp ? summary.data as typeof summary.data & {
         position_side: string;
@@ -185,7 +183,7 @@ const MetricsBar: React.FC = () => {
                 {/* Spacer */}
                 <div style={{ flex: 1 }} />
 
-                {/* Connection Status + Time */}
+                {/* Connection Status + Uptime */}
                 <div style={{
                     padding: '16px 24px',
                     display: 'flex',
@@ -194,15 +192,25 @@ const MetricsBar: React.FC = () => {
                     borderLeft: '1px solid var(--border-color)'
                 }}>
                     <ConnectionStatus status={connectionStatus} />
-                    <Tooltip content="Last tick time">
-                        <span style={{
-                            fontSize: '11px',
-                            color: 'var(--text-tertiary)',
-                            fontFamily: 'var(--font-mono)',
+                    <Tooltip content="Bot running time">
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
                             cursor: 'help'
                         }}>
-                            {timeStr}
-                        </span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 6v6l4 2" />
+                            </svg>
+                            <span style={{
+                                fontSize: '11px',
+                                color: 'var(--text-tertiary)',
+                                fontFamily: 'var(--font-mono)'
+                            }}>
+                                {s.uptime}
+                            </span>
+                        </div>
                     </Tooltip>
                 </div>
             </div>
