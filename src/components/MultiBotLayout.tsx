@@ -47,8 +47,8 @@ const MultiBotLayout: React.FC<MultiBotLayoutProps> = ({ children }) => {
             <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                backgroundColor: '#1a1a1a',
-                borderBottom: '1px solid #333',
+                background: 'var(--bg-primary)',
+                borderBottom: '1px solid var(--border-color)',
                 padding: '0 16px',
                 height: '48px',
                 flexShrink: 0
@@ -60,15 +60,17 @@ const MultiBotLayout: React.FC<MultiBotLayoutProps> = ({ children }) => {
                             onClick={() => setActiveTabId(conn.id)}
                             style={{
                                 padding: '8px 16px',
-                                backgroundColor: activeTabId === conn.id ? '#2e2e2e' : 'transparent',
-                                color: activeTabId === conn.id ? '#fff' : '#888',
+                                background: activeTabId === conn.id ? 'var(--bg-hover)' : 'transparent',
+                                color: activeTabId === conn.id ? 'var(--text-primary)' : 'var(--text-tertiary)',
                                 border: 'none',
-                                borderBottom: activeTabId === conn.id ? '2px solid #0070f3' : '2px solid transparent',
+                                borderBottom: activeTabId === conn.id ? '2px solid var(--accent-primary)' : '2px solid transparent',
                                 cursor: 'pointer',
                                 whiteSpace: 'nowrap',
-                                fontWeight: activeTabId === conn.id ? 'bold' : 'normal',
+                                fontWeight: activeTabId === conn.id ? 600 : 400,
                                 transition: 'all 0.2s',
-                                fontSize: '14px'
+                                fontSize: '13px',
+                                fontFamily: 'inherit',
+                                letterSpacing: '-0.01em'
                             }}
                         >
                             {conn.name}
@@ -81,12 +83,14 @@ const MultiBotLayout: React.FC<MultiBotLayoutProps> = ({ children }) => {
                         onClick={() => setShowManager(true)}
                         style={{
                             padding: '6px 12px',
-                            backgroundColor: '#333',
-                            color: '#fff',
-                            border: '1px solid #444',
-                            borderRadius: '4px',
+                            background: 'var(--bg-hover)',
+                            color: 'var(--text-secondary)',
+                            border: '1px solid var(--border-subtle)',
+                            borderRadius: 'var(--radius-sm)',
                             cursor: 'pointer',
-                            fontSize: '12px'
+                            fontSize: '12px',
+                            fontFamily: 'inherit',
+                            transition: 'all 0.2s'
                         }}
                     >
                         Manage Bots

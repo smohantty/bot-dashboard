@@ -26,8 +26,6 @@ const OrderBook: React.FC = () => {
         });
 
         // Both sides show closest to current price FIRST (at top)
-        // - Asks: reverse to ascending (lowest/closest at top)
-        // - Bids: keep descending (highest/closest at top)
         asks.reverse();
 
         return { asks, bids };
@@ -36,15 +34,15 @@ const OrderBook: React.FC = () => {
     if (!gridState || !lastPrice) {
         return (
             <div className="card" style={{
-                padding: '60px 40px',
+                padding: '80px 40px',
                 textAlign: 'center',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: '16px',
+                gap: '20px',
                 animationDelay: '200ms'
             }}>
-                <div className="skeleton" style={{ width: '100%', height: '200px' }} />
+                <div className="skeleton" style={{ width: '100%', height: '280px', borderRadius: 'var(--radius-md)' }} />
             </div>
         );
     }
@@ -52,7 +50,6 @@ const OrderBook: React.FC = () => {
     const isPerp = gridState.strategy_type === 'perp_grid';
 
     // Best ask (lowest sell) and best bid (highest buy) for spread display
-    // After reversing, asks[0] is the closest (lowest) ask
     const bestAsk = asks.length > 0 ? asks[0] : null;
     const bestBid = bids.length > 0 ? bids[0] : null;
     const spread = bestAsk && bestBid
@@ -66,34 +63,56 @@ const OrderBook: React.FC = () => {
         }}>
             {/* Header */}
             <div className="card-header">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--text-secondary)' }}>
-                        <path d="M3 3v18h18" />
-                        <path d="M18 9l-5 5-4-4-3 3" />
-                    </svg>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '8px',
+                        background: 'var(--bg-hover)',
+                        border: '1px solid var(--border-color)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2">
+                            <path d="M3 3v18h18" />
+                            <path d="M18 9l-5 5-4-4-3 3" />
+                        </svg>
+                    </div>
                     <span className="card-header-title">Order Book</span>
                 </div>
-                <span className={`badge ${isPerp ? 'badge-neutral' : 'badge-muted'}`}>
-                    {isPerp ? `PERP · ${gridState.grid_bias}` : 'SPOT'}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    {spread && (
+                        <span style={{
+                            fontSize: '11px',
+                            color: 'var(--text-tertiary)',
+                            fontFamily: 'var(--font-mono)'
+                        }}>
+                            Spread: <span style={{ color: 'var(--accent-primary)' }}>{spread}%</span>
+                        </span>
+                    )}
+                    <span className={`badge ${isPerp ? 'badge-neutral' : 'badge-muted'}`}>
+                        {isPerp ? `PERP · ${gridState.grid_bias}` : 'SPOT'}
+                    </span>
+                </div>
             </div>
 
             {/* CLOB Layout - Prices meet in the middle */}
-            <div style={{ display: 'flex', minHeight: '320px' }}>
+            <div style={{ display: 'flex', minHeight: '280px' }}>
                 {/* Asks Side */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                     {/* Header: Action | Trades | Size | Dist | Price */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: '80px 45px 65px 55px 1fr',
-                        padding: '10px 14px',
-                        fontSize: '10px',
+                        gridTemplateColumns: '80px 50px 70px 60px 1fr',
+                        padding: '12px 16px',
+                        fontSize: '9px',
                         color: 'var(--text-tertiary)',
                         textTransform: 'uppercase',
-                        letterSpacing: '0.5px',
-                        fontWeight: 500,
+                        letterSpacing: '0.6px',
+                        fontWeight: 600,
                         borderBottom: '1px solid var(--border-color)',
-                        background: 'rgba(255, 82, 82, 0.03)'
+                        background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.04) 0%, transparent 100%)'
                     }}>
                         <span>Action</span>
                         <span style={{ textAlign: 'center' }}>Trades</span>
@@ -104,7 +123,7 @@ const OrderBook: React.FC = () => {
                     <div style={{
                         flex: 1,
                         overflowY: 'auto',
-                        maxHeight: '280px',
+                        maxHeight: '240px',
                         display: 'flex',
                         flexDirection: 'column'
                     }}>
@@ -120,6 +139,8 @@ const OrderBook: React.FC = () => {
                                     currentPrice={lastPrice}
                                     isNearSpread={idx === 0}
                                     isPerp={isPerp}
+                                    totalZones={asks.length}
+                                    zoneIndex={idx}
                                 />
                             ))
                         )}
@@ -128,114 +149,61 @@ const OrderBook: React.FC = () => {
 
                 {/* Center Price Column */}
                 <div style={{
-                    width: '140px',
+                    width: '160px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '20px 12px',
-                    background: 'linear-gradient(180deg, var(--bg-base) 0%, rgba(5, 7, 10, 0.95) 100%)',
+                    padding: '24px 16px',
+                    background: 'linear-gradient(180deg, var(--bg-base) 0%, rgba(3, 5, 8, 0.98) 100%)',
                     borderLeft: '1px solid var(--border-color)',
                     borderRight: '1px solid var(--border-color)',
                     position: 'relative'
                 }}>
-                    {/* Decorative glow */}
+                    {/* Decorative glow - more intense */}
                     <div style={{
                         position: 'absolute',
-                        width: '80px',
-                        height: '80px',
+                        width: '120px',
+                        height: '120px',
                         borderRadius: '50%',
                         background: 'var(--accent-glow)',
-                        filter: 'blur(35px)',
-                        opacity: 0.4
+                        filter: 'blur(50px)',
+                        opacity: 0.5
                     }} />
 
                     <div style={{
                         fontSize: '9px',
                         color: 'var(--text-tertiary)',
-                        marginBottom: '8px',
+                        marginBottom: '10px',
                         textTransform: 'uppercase',
-                        letterSpacing: '1px',
-                        fontWeight: 500
+                        letterSpacing: '1.2px',
+                        fontWeight: 600
                     }}>
                         Current
                     </div>
                     <div style={{
-                        fontSize: '18px',
+                        fontSize: '22px',
                         fontWeight: 700,
                         fontFamily: 'var(--font-mono)',
                         color: 'var(--text-primary)',
-                        textShadow: '0 0 20px var(--accent-glow)',
+                        textShadow: '0 0 30px var(--accent-glow)',
                         position: 'relative',
-                        zIndex: 1
+                        zIndex: 1,
+                        letterSpacing: '-0.03em'
                     }}>
                         ${lastPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
 
-                    {/* Spread indicator */}
-                    {spread && (
-                        <div style={{
-                            marginTop: '12px',
-                            padding: '4px 10px',
-                            background: 'var(--bg-hover)',
-                            borderRadius: 'var(--radius-sm)',
-                            fontSize: '10px',
-                            color: 'var(--text-secondary)',
-                            fontFamily: 'var(--font-mono)',
-                            position: 'relative',
-                            zIndex: 1
-                        }}>
-                            <span style={{ color: 'var(--text-tertiary)' }}>Spread:</span> {spread}%
-                        </div>
-                    )}
-
+                    {/* Zone counts with visual bars */}
                     <div style={{
-                        marginTop: '16px',
+                        marginTop: '24px',
                         display: 'flex',
-                        gap: '20px',
+                        gap: '24px',
                         position: 'relative',
                         zIndex: 1
                     }}>
-                        <div style={{ textAlign: 'center' }}>
-                            <div style={{
-                                color: 'var(--color-sell)',
-                                fontWeight: 700,
-                                fontSize: '18px',
-                                fontFamily: 'var(--font-mono)',
-                                textShadow: '0 0 12px var(--color-sell-glow)'
-                            }}>
-                                {asks.length}
-                            </div>
-                            <div style={{
-                                color: 'var(--text-tertiary)',
-                                fontSize: '9px',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.5px',
-                                marginTop: '2px'
-                            }}>
-                                Asks
-                            </div>
-                        </div>
-                        <div style={{ textAlign: 'center' }}>
-                            <div style={{
-                                color: 'var(--color-buy)',
-                                fontWeight: 700,
-                                fontSize: '18px',
-                                fontFamily: 'var(--font-mono)',
-                                textShadow: '0 0 12px var(--color-buy-glow)'
-                            }}>
-                                {bids.length}
-                            </div>
-                            <div style={{
-                                color: 'var(--text-tertiary)',
-                                fontSize: '9px',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.5px',
-                                marginTop: '2px'
-                            }}>
-                                Bids
-                            </div>
-                        </div>
+                        <ZoneCounter label="Asks" count={asks.length} color="var(--color-sell-bright)" />
+                        <ZoneCounter label="Bids" count={bids.length} color="var(--color-buy-bright)" />
                     </div>
                 </div>
 
@@ -244,15 +212,15 @@ const OrderBook: React.FC = () => {
                     {/* Header: Price | Dist | Size | Trades | Action */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: '1fr 55px 65px 45px 80px',
-                        padding: '10px 14px',
-                        fontSize: '10px',
+                        gridTemplateColumns: '1fr 60px 70px 50px 80px',
+                        padding: '12px 16px',
+                        fontSize: '9px',
                         color: 'var(--text-tertiary)',
                         textTransform: 'uppercase',
-                        letterSpacing: '0.5px',
-                        fontWeight: 500,
+                        letterSpacing: '0.6px',
+                        fontWeight: 600,
                         borderBottom: '1px solid var(--border-color)',
-                        background: 'rgba(0, 230, 118, 0.03)'
+                        background: 'linear-gradient(270deg, rgba(34, 197, 94, 0.04) 0%, transparent 100%)'
                     }}>
                         <span>Price</span>
                         <span>Dist</span>
@@ -263,7 +231,7 @@ const OrderBook: React.FC = () => {
                     <div style={{
                         flex: 1,
                         overflowY: 'auto',
-                        maxHeight: '280px'
+                        maxHeight: '240px'
                     }}>
                         {bids.length === 0 ? (
                             <EmptyState side="bids" />
@@ -277,6 +245,8 @@ const OrderBook: React.FC = () => {
                                     currentPrice={lastPrice}
                                     isNearSpread={idx === 0}
                                     isPerp={isPerp}
+                                    totalZones={bids.length}
+                                    zoneIndex={idx}
                                 />
                             ))
                         )}
@@ -287,9 +257,34 @@ const OrderBook: React.FC = () => {
     );
 };
 
+const ZoneCounter: React.FC<{ label: string; count: number; color: string }> = ({ label, count, color }) => (
+    <div style={{ textAlign: 'center' }}>
+        <div style={{
+            color: color,
+            fontWeight: 700,
+            fontSize: '20px',
+            fontFamily: 'var(--font-mono)',
+            textShadow: `0 0 16px ${color}50`,
+            letterSpacing: '-0.02em'
+        }}>
+            {count}
+        </div>
+        <div style={{
+            color: 'var(--text-tertiary)',
+            fontSize: '9px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.6px',
+            marginTop: '4px',
+            fontWeight: 500
+        }}>
+            {label}
+        </div>
+    </div>
+);
+
 const EmptyState: React.FC<{ side: 'asks' | 'bids' }> = ({ side }) => (
     <div style={{
-        padding: '40px 20px',
+        padding: '50px 20px',
         textAlign: 'center',
         color: 'var(--text-tertiary)',
         fontSize: '12px',
@@ -298,14 +293,24 @@ const EmptyState: React.FC<{ side: 'asks' | 'bids' }> = ({ side }) => (
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        gap: '8px'
+        gap: '12px'
     }}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ opacity: 0.5 }}>
-            <circle cx="12" cy="12" r="10" />
-            <line x1="15" y1="9" x2="9" y2="15" />
-            <line x1="9" y1="9" x2="15" y2="15" />
-        </svg>
-        No {side}
+        <div style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            background: 'var(--bg-hover)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ opacity: 0.5 }}>
+                <circle cx="12" cy="12" r="10" />
+                <line x1="15" y1="9" x2="9" y2="15" />
+                <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+        </div>
+        <span style={{ fontWeight: 500 }}>No {side}</span>
     </div>
 );
 
@@ -316,14 +321,17 @@ const ZoneRow: React.FC<{
     currentPrice: number;
     isNearSpread?: boolean;
     isPerp: boolean;
-}> = ({ zone, side, szDecimals, currentPrice, isNearSpread, isPerp }) => {
+    totalZones: number;
+    zoneIndex: number;
+}> = ({ zone, side, szDecimals, currentPrice, isNearSpread, isPerp, totalZones, zoneIndex }) => {
+    const [isHovered, setIsHovered] = React.useState(false);
     const isAsk = side === 'ask';
     const displayPrice = isAsk ? zone.upper_price : zone.lower_price;
     const nextPrice = isAsk ? zone.lower_price : zone.upper_price;
 
     const isClose = zone.is_reduce_only;
     const actionColor = isClose ? 'var(--color-warning)' :
-        zone.pending_side === 'Buy' ? 'var(--color-buy)' : 'var(--color-sell)';
+        zone.pending_side === 'Buy' ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)';
 
     const displayLabel = !isPerp
         ? zone.pending_side
@@ -345,12 +353,16 @@ const ZoneRow: React.FC<{
             ? 'var(--text-primary)'
             : 'var(--text-secondary)';
 
+    // Calculate depth opacity (closer = brighter)
+    const depthOpacity = zone.has_order ? 1 : 0.35;
+    const rowBrightness = isNearSpread ? 1 : Math.max(0.6, 1 - (zoneIndex / totalZones) * 0.4);
+
     const actionBadge = (
         <span style={{
-            background: `${actionColor}15`,
-            border: `1px solid ${actionColor}30`,
+            background: `${actionColor}18`,
+            border: `1px solid ${actionColor}35`,
             color: actionColor,
-            padding: '3px 8px',
+            padding: '4px 8px',
             borderRadius: 'var(--radius-sm)',
             fontSize: '9px',
             fontWeight: 600,
@@ -369,11 +381,12 @@ const ZoneRow: React.FC<{
             gap: '2px'
         }}>
             <span style={{
-                color: isAsk ? 'var(--color-sell)' : 'var(--color-buy)',
+                color: isAsk ? 'var(--color-sell-bright)' : 'var(--color-buy-bright)',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 600,
                 fontSize: '12px',
-                textShadow: isNearSpread ? `0 0 8px ${isAsk ? 'var(--color-sell-glow)' : 'var(--color-buy-glow)'}` : 'none'
+                letterSpacing: '-0.02em',
+                textShadow: isNearSpread ? `0 0 12px ${isAsk ? 'var(--color-sell-glow)' : 'var(--color-buy-glow)'}` : 'none'
             }}>
                 {displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
@@ -382,7 +395,8 @@ const ZoneRow: React.FC<{
                     color: 'var(--text-muted)',
                     fontFamily: 'var(--font-mono)',
                     cursor: 'help',
-                    fontSize: '10px'
+                    fontSize: '10px',
+                    letterSpacing: '-0.02em'
                 }}>
                     {nextPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </span>
@@ -390,30 +404,25 @@ const ZoneRow: React.FC<{
         </div>
     );
 
-    // Column order:
-    // Asks: Action | Trades | Size | Dist | Price
-    // Bids: Price | Dist | Size | Trades | Action
+    const baseRowBg = isNearSpread
+        ? (isAsk ? 'rgba(239, 68, 68, 0.04)' : 'rgba(34, 197, 94, 0.04)')
+        : 'transparent';
 
     return (
-        <div style={{
-            display: 'grid',
-            gridTemplateColumns: isAsk ? '80px 45px 65px 55px 1fr' : '1fr 55px 65px 45px 80px',
-            alignItems: 'center',
-            padding: '8px 14px',
-            fontSize: '12px',
-            opacity: zone.has_order ? 1 : 0.35,
-            borderBottom: '1px solid var(--border-color)',
-            background: isNearSpread ? (isAsk ? 'rgba(255, 82, 82, 0.03)' : 'rgba(0, 230, 118, 0.03)') : 'transparent',
-            transition: 'background var(--transition-fast), opacity var(--transition-fast)'
-        }}
-            onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--bg-hover)';
+        <div
+            style={{
+                display: 'grid',
+                gridTemplateColumns: isAsk ? '80px 50px 70px 60px 1fr' : '1fr 60px 70px 50px 80px',
+                alignItems: 'center',
+                padding: '10px 16px',
+                fontSize: '12px',
+                opacity: depthOpacity * rowBrightness,
+                borderBottom: '1px solid var(--border-color)',
+                background: isHovered ? 'var(--bg-hover)' : baseRowBg,
+                transition: 'all var(--transition-fast)'
             }}
-            onMouseLeave={(e) => {
-                e.currentTarget.style.background = isNearSpread
-                    ? (isAsk ? 'rgba(255, 82, 82, 0.03)' : 'rgba(0, 230, 118, 0.03)')
-                    : 'transparent';
-            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
             {isAsk ? (
                 // Asks: Action | Trades | Size | Dist | Price
@@ -423,14 +432,18 @@ const ZoneRow: React.FC<{
                         textAlign: 'center',
                         fontFamily: 'var(--font-mono)',
                         color: zone.roundtrip_count > 0 ? 'var(--accent-primary)' : 'var(--text-muted)',
-                        fontSize: '11px'
+                        fontSize: '11px',
+                        fontWeight: zone.roundtrip_count > 0 ? 600 : 400,
+                        textShadow: zone.roundtrip_count > 0 ? '0 0 10px var(--accent-glow)' : 'none'
                     }}>
                         {zone.roundtrip_count}
                     </span>
                     <span style={{
                         textAlign: 'center',
                         fontFamily: 'var(--font-mono)',
-                        color: 'var(--text-secondary)'
+                        color: 'var(--text-secondary)',
+                        fontSize: '11px',
+                        letterSpacing: '-0.02em'
                     }}>
                         {zone.size.toFixed(szDecimals)}
                     </span>
@@ -438,8 +451,9 @@ const ZoneRow: React.FC<{
                         textAlign: 'right',
                         fontFamily: 'var(--font-mono)',
                         color: distanceColor,
-                        fontSize: '11px',
-                        fontWeight: 500
+                        fontSize: '10px',
+                        fontWeight: 500,
+                        letterSpacing: '-0.02em'
                     }}>
                         {distanceDisplay}
                     </span>
@@ -452,15 +466,18 @@ const ZoneRow: React.FC<{
                     <span style={{
                         fontFamily: 'var(--font-mono)',
                         color: distanceColor,
-                        fontSize: '11px',
-                        fontWeight: 500
+                        fontSize: '10px',
+                        fontWeight: 500,
+                        letterSpacing: '-0.02em'
                     }}>
                         {distanceDisplay}
                     </span>
                     <span style={{
                         textAlign: 'center',
                         fontFamily: 'var(--font-mono)',
-                        color: 'var(--text-secondary)'
+                        color: 'var(--text-secondary)',
+                        fontSize: '11px',
+                        letterSpacing: '-0.02em'
                     }}>
                         {zone.size.toFixed(szDecimals)}
                     </span>
@@ -468,7 +485,9 @@ const ZoneRow: React.FC<{
                         textAlign: 'center',
                         fontFamily: 'var(--font-mono)',
                         color: zone.roundtrip_count > 0 ? 'var(--accent-primary)' : 'var(--text-muted)',
-                        fontSize: '11px'
+                        fontSize: '11px',
+                        fontWeight: zone.roundtrip_count > 0 ? 600 : 400,
+                        textShadow: zone.roundtrip_count > 0 ? '0 0 10px var(--accent-glow)' : 'none'
                     }}>
                         {zone.roundtrip_count}
                     </span>
