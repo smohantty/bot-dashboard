@@ -218,8 +218,7 @@ const ConfigCell: React.FC<{
                 fontSize: '9px',
                 color: 'var(--text-tertiary)',
                 marginBottom: '6px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px',
+                letterSpacing: '0.2px',
                 fontWeight: 500
             }}>
                 {icon && (
