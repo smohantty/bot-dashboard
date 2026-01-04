@@ -341,13 +341,8 @@ const ZoneRow: React.FC<{
         ? `+${distancePercent.toFixed(2)}%`
         : `${distancePercent.toFixed(2)}%`;
 
-    // Color based on how close (closer = more vivid)
-    const absDistance = Math.abs(distancePercent);
-    const distanceColor = absDistance < 0.5
-        ? 'var(--accent-primary)'
-        : absDistance < 1
-            ? 'var(--text-primary)'
-            : 'var(--text-secondary)';
+    // Use consistent color for distance display
+    const distanceColor = 'var(--text-secondary)';
 
     // Calculate depth opacity (closer = brighter)
     const depthOpacity = zone.has_order ? 1 : 0.35;
