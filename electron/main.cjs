@@ -7,8 +7,10 @@ function createWindow() {
         height: 800,
         darkTheme: true,
         backgroundColor: '#1a1a1a',
+        icon: path.join(__dirname, 'icon.png'),
         webPreferences: {
             nodeIntegration: true,
+            additionalArguments: process.platform === 'linux' ? ['--class=trading-bot-dashboard'] : [],
         },
     });
 
@@ -21,6 +23,8 @@ function createWindow() {
         win.loadFile(path.join(__dirname, '../dist/index.html'));
     }
 }
+
+
 
 app.whenReady().then(createWindow);
 

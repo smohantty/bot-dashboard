@@ -41,6 +41,26 @@ npm run electron:build
 ```
 The output artifacts (e.g., `.AppImage`) will be located in the `dist` folder.
 
+### Linux Installation (Recommended)
+For proper desktop integration with app icons and launcher:
+
+```bash
+# Build first
+npm run electron:build
+
+# Install system-wide (requires sudo)
+sudo ./install.sh
+```
+
+After installation:
+- Find "Trading Bot Dashboard" in your application menu
+- Pin it to your dock/favorites for quick access
+
+To uninstall:
+```bash
+sudo ./uninstall.sh
+```
+
 ---
 
 
