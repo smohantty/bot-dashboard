@@ -13,13 +13,13 @@ const OrderBook: React.FC = () => {
         if (!gridState || !lastPrice) return { asks: [], bids: [] };
 
         // Sort all zones by price descending (highest first)
-        const sortedZones = [...gridState.zones].sort((a, b) => b.upper_price - a.upper_price);
+        const sortedZones = [...gridState.zones].sort((a, b) => b.sell_price - a.sell_price);
 
         const asks: ZoneInfo[] = [];
         const bids: ZoneInfo[] = [];
 
         sortedZones.forEach(zone => {
-            if (zone.pending_side === 'Sell') {
+            if (zone.order_side === 'Sell') {
                 asks.push(zone);
             } else {
                 bids.push(zone);
@@ -54,7 +54,7 @@ const OrderBook: React.FC = () => {
     const bestAsk = asks.length > 0 ? asks[0] : null;
     const bestBid = bids.length > 0 ? bids[0] : null;
     const spread = bestAsk && bestBid
-        ? ((bestAsk.upper_price - bestBid.lower_price) / lastPrice * 100).toFixed(3)
+        ? ((bestAsk.sell_price - bestBid.buy_price) / lastPrice * 100).toFixed(3)
         : null;
 
     // Helper to format price consistently
@@ -330,8 +330,8 @@ const ZoneRow: React.FC<{
 }> = ({ zone, side, szDecimals, pxDecimals, currentPrice, isNearSpread, isPerp, totalZones, zoneIndex }) => {
     const [isHovered, setIsHovered] = React.useState(false);
     const isAsk = side === 'ask';
-    const displayPrice = isAsk ? zone.upper_price : zone.lower_price;
-    const nextPrice = isAsk ? zone.lower_price : zone.upper_price;
+    const displayPrice = isAsk ? zone.sell_price : zone.buy_price;
+    const nextPrice = isAsk ? zone.buy_price : zone.sell_price;
 
     const isClose = zone.is_reduce_only;
 

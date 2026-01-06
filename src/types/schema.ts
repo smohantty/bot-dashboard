@@ -80,10 +80,10 @@ export type StrategySummary =
 
 export interface ZoneInfo {
     index: number;
-    lower_price: number;
-    upper_price: number;
+    buy_price: number;
+    sell_price: number;
     size: number;
-    pending_side: 'Buy' | 'Sell';
+    order_side: 'Buy' | 'Sell';
     has_order: boolean;
     is_reduce_only: boolean;
 
