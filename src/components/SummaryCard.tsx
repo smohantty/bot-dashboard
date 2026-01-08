@@ -195,7 +195,7 @@ const SummaryCard: React.FC = () => {
                 borderBottom: '1px solid var(--border-color)'
             }}>
                 <PnLCell label="Matched Profit" value={s.matched_profit} />
-                <PnLCell label="Fees Paid" value={-s.total_fees} showNegative />
+                <PnLCell label="Fees Paid" value={s.total_fees} showNegative />
                 <StatCell label="Roundtrips" value={s.roundtrips.toString()} highlight isLast />
             </div>
 

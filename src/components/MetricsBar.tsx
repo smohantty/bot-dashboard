@@ -159,7 +159,7 @@ const MetricsBar: React.FC = () => {
 
                 {/* Matched Profit */}
                 <MetricCell
-                    label="Matched"
+                    label="Matched Profit"
                     value={formatPnl(s.matched_profit)}
                     valueColor={s.matched_profit >= 0 ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)'}
                 />
