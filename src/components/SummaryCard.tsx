@@ -115,7 +115,7 @@ const SummaryCard: React.FC = () => {
                     />
                     <PnLCell
                         label="Fees Paid"
-                        value={-s.total_fees}
+                        value={s.total_fees}
                         showNegative
                         tooltip="Total trading fees"
                     />

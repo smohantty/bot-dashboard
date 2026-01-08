@@ -167,7 +167,7 @@ const MetricsBar: React.FC = () => {
                 {/* Fees */}
                 <MetricCell
                     label="Fees"
-                    value={`-${formatUsd(s.total_fees)}`}
+                    value={formatUsd(s.total_fees)}
                     valueColor="var(--color-sell-bright)"
                 />
 
