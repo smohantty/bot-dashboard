@@ -41,7 +41,7 @@ const MetricsBar: React.FC = () => {
     const isPerp = summary.type === 'perp_grid';
     const s = summary.data;
 
-    const totalPnl = s.realized_pnl + s.unrealized_pnl - s.total_fees;
+    const totalPnl = s.total_profit;
     const pnlColor = totalPnl >= 0 ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)';
 
     const perpData = isPerp ? summary.data as typeof summary.data & {
@@ -157,18 +157,11 @@ const MetricsBar: React.FC = () => {
                     highlight
                 />
 
-                {/* Realized */}
+                {/* Matched Profit */}
                 <MetricCell
-                    label="Realized"
-                    value={formatPnl(s.realized_pnl)}
-                    valueColor={s.realized_pnl >= 0 ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)'}
-                />
-
-                {/* Unrealized */}
-                <MetricCell
-                    label="Unrealized"
-                    value={formatPnl(s.unrealized_pnl)}
-                    valueColor={s.unrealized_pnl >= 0 ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)'}
+                    label="Matched"
+                    value={formatPnl(s.matched_profit)}
+                    valueColor={s.matched_profit >= 0 ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)'}
                 />
 
                 {/* Fees */}
@@ -233,10 +226,6 @@ const MetricsBar: React.FC = () => {
                             label="Margin"
                             value={formatUsd(perpData?.margin_balance || 0)}
                         />
-                        <MetricCellCompact
-                            label="Avg Entry"
-                            value={formatPrice(s.avg_entry_price)}
-                        />
                         {s.initial_entry_price && (
                             <MetricCellCompact
                                 label="Start Entry"
@@ -260,10 +249,6 @@ const MetricsBar: React.FC = () => {
                         <MetricCellCompact
                             label={quoteAsset}
                             value={formatUsd(spotData?.quote_balance || 0)}
-                        />
-                        <MetricCellCompact
-                            label="Avg Entry"
-                            value={formatPrice(s.avg_entry_price)}
                         />
                         {s.initial_entry_price && (
                             <MetricCellCompact

@@ -44,7 +44,7 @@ const SummaryCard: React.FC = () => {
     const isPerp = summary.type === 'perp_grid';
     const s = summary.data;
 
-    const totalPnl = s.realized_pnl + s.unrealized_pnl - s.total_fees;
+    const totalPnl = s.total_profit;
     const pnlColor = totalPnl >= 0 ? 'var(--color-buy-bright)' : 'var(--color-sell-bright)';
     const pnlGlow = totalPnl >= 0 ? 'var(--color-buy-glow)' : 'var(--color-sell-glow)';
     const pnlBg = totalPnl >= 0 ? 'rgba(34, 197, 94, 0.06)' : 'rgba(239, 68, 68, 0.06)';
@@ -105,18 +105,13 @@ const SummaryCard: React.FC = () => {
                 {/* PnL Breakdown Row */}
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(4, 1fr)',
+                    gridTemplateColumns: 'repeat(3, 1fr)',
                     borderBottom: '1px solid var(--border-color)'
                 }}>
                     <PnLCell
-                        label="Realized"
-                        value={s.realized_pnl}
-                        tooltip="Profit/loss from completed trades"
-                    />
-                    <PnLCell
-                        label="Unrealized"
-                        value={s.unrealized_pnl}
-                        tooltip="Current position value vs entry"
+                        label="Matched Profit"
+                        value={s.matched_profit}
+                        tooltip="Profit captured from closed grid pairs"
                     />
                     <PnLCell
                         label="Fees Paid"
@@ -135,7 +130,7 @@ const SummaryCard: React.FC = () => {
                 {/* Stats Row */}
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(4, 1fr)',
+                    gridTemplateColumns: 'repeat(3, 1fr)',
                     borderBottom: '1px solid var(--border-color)'
                 }}>
                     <StatCell
@@ -144,7 +139,6 @@ const SummaryCard: React.FC = () => {
                         subValue={perpData.position_side}
                         valueColor={positionColor}
                     />
-                    <StatCell label="Avg Entry" value={`$${perpData.avg_entry_price.toFixed(2)}`} />
                     <StatCell
                         label="Initial Entry"
                         value={s.initial_entry_price ? `$${s.initial_entry_price.toFixed(2)}` : '--'}
@@ -197,11 +191,10 @@ const SummaryCard: React.FC = () => {
             {/* PnL Breakdown Row */}
             <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
+                gridTemplateColumns: 'repeat(3, 1fr)',
                 borderBottom: '1px solid var(--border-color)'
             }}>
-                <PnLCell label="Realized" value={s.realized_pnl} />
-                <PnLCell label="Unrealized" value={s.unrealized_pnl} />
+                <PnLCell label="Matched Profit" value={s.matched_profit} />
                 <PnLCell label="Fees Paid" value={-s.total_fees} showNegative />
                 <StatCell label="Roundtrips" value={s.roundtrips.toString()} highlight isLast />
             </div>
@@ -209,11 +202,10 @@ const SummaryCard: React.FC = () => {
             {/* Stats Row */}
             <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
+                gridTemplateColumns: 'repeat(3, 1fr)',
                 borderBottom: '1px solid var(--border-color)'
             }}>
                 <StatCell label="Position" value={spotData.position_size.toFixed(4)} />
-                <StatCell label="Avg Entry" value={`$${spotData.avg_entry_price.toFixed(4)}`} />
                 <StatCell
                     label="Initial Entry"
                     value={s.initial_entry_price ? `$${s.initial_entry_price.toFixed(4)}` : '--'}

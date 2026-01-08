@@ -88,7 +88,7 @@ const HeaderMetrics: React.FC = () => {
     // Render based on strategy type
     if (summary.type === 'spot_grid') {
         const s = summary.data;
-        const totalPnl = s.realized_pnl + s.unrealized_pnl - s.total_fees;
+        const totalPnl = s.total_profit;
         const pnlColor = totalPnl >= 0 ? 'var(--color-buy)' : 'var(--color-sell)';
 
         return (
@@ -104,12 +104,12 @@ const HeaderMetrics: React.FC = () => {
                     label="TOTAL PnL"
                     value={`$${totalPnl.toFixed(2)}`}
                     color={pnlColor}
-                    subValue={`Unrealized: $${s.unrealized_pnl.toFixed(2)} • Fees: $${s.total_fees.toFixed(2)}`}
+                    subValue={`Matched: $${s.matched_profit.toFixed(2)} • Fees: $${s.total_fees.toFixed(2)}`}
                 />
                 <MetricCard
                     label="POSITION"
                     value={`${s.position_size.toFixed(4)}`}
-                    subValue={`Avg Entry: $${s.avg_entry_price.toFixed(4)}`}
+                    subValue={s.initial_entry_price ? `Start: $${s.initial_entry_price.toFixed(4)}` : undefined}
                 />
                 <MetricCard
                     label="WALLET"
@@ -127,7 +127,7 @@ const HeaderMetrics: React.FC = () => {
 
     // Perp Grid
     const s = summary.data;
-    const totalPnl = s.realized_pnl + s.unrealized_pnl - s.total_fees;
+    const totalPnl = s.total_profit;
     const pnlColor = totalPnl >= 0 ? 'var(--color-buy)' : 'var(--color-sell)';
 
     const positionIcon = s.position_side === 'Long' ? '📈' : s.position_side === 'Short' ? '📉' : '➖';
@@ -148,13 +148,13 @@ const HeaderMetrics: React.FC = () => {
                 label="TOTAL PnL"
                 value={`$${totalPnl.toFixed(2)}`}
                 color={pnlColor}
-                subValue={`Unrealized: $${s.unrealized_pnl.toFixed(2)} • Fees: $${s.total_fees.toFixed(2)}`}
+                subValue={`Matched: $${s.matched_profit.toFixed(2)} • Fees: $${s.total_fees.toFixed(2)}`}
             />
             <MetricCard
                 label="POSITION"
                 value={`${positionIcon} ${Math.abs(s.position_size).toFixed(4)}`}
                 color={positionColor}
-                subValue={`${s.position_side} @ $${s.avg_entry_price.toFixed(4)}`}
+                subValue={s.initial_entry_price ? `Start: $${s.initial_entry_price.toFixed(4)}` : undefined}
             />
             <MetricCard
                 label="MARGIN"

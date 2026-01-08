@@ -286,9 +286,8 @@
         "state",
         "uptime",
         "position_size",
-        "avg_entry_price",
-        "realized_pnl",
-        "unrealized_pnl",
+        "matched_profit",
+        "total_profit",
         "total_fees",
         "grid_count",
         "range_low",
@@ -314,13 +313,10 @@
           "type": "number",
           "description": "Base asset inventory"
         },
-        "avg_entry_price": {
+        "matched_profit": {
           "type": "number"
         },
-        "realized_pnl": {
-          "type": "number"
-        },
-        "unrealized_pnl": {
+        "total_profit": {
           "type": "number"
         },
         "total_fees": {
@@ -370,9 +366,8 @@
         "uptime",
         "position_size",
         "position_side",
-        "avg_entry_price",
-        "realized_pnl",
-        "unrealized_pnl",
+        "matched_profit",
+        "total_profit",
         "total_fees",
         "leverage",
         "grid_bias",
@@ -406,13 +401,10 @@
             "Flat"
           ]
         },
-        "avg_entry_price": {
+        "matched_profit": {
           "type": "number"
         },
-        "realized_pnl": {
-          "type": "number"
-        },
-        "unrealized_pnl": {
+        "total_profit": {
           "type": "number"
         },
         "total_fees": {

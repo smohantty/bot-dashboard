@@ -34,9 +34,8 @@ export interface SpotGridSummary {
     state: string;
     uptime: string; // Human-readable uptime, e.g. "2d 14h 30m"
     position_size: number;
-    avg_entry_price: number;
-    realized_pnl: number;
-    unrealized_pnl: number;
+    matched_profit: number;
+    total_profit: number;
     total_fees: number;
     initial_entry_price?: number;
     grid_count: number;
@@ -54,9 +53,8 @@ export interface PerpGridSummary {
     uptime: string; // Human-readable uptime, e.g. "2d 14h 30m"
     position_size: number;
     position_side: 'Long' | 'Short' | 'Flat';
-    avg_entry_price: number;
-    realized_pnl: number;
-    unrealized_pnl: number;
+    matched_profit: number;
+    total_profit: number;
     total_fees: number;
     leverage: number;
     grid_bias: 'Long' | 'Short';
