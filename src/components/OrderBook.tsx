@@ -201,12 +201,46 @@ const OrderBook: React.FC = () => {
                     <div style={{
                         marginTop: '14px',
                         display: 'flex',
-                        gap: '16px',
+                        flexDirection: 'column',
+                        gap: '10px',
                         position: 'relative',
-                        zIndex: 1
+                        zIndex: 1,
+                        alignItems: 'center'
                     }}>
-                        <ZoneCounter label="Bids" count={bids.length} color="var(--color-buy-bright)" />
-                        <ZoneCounter label="Asks" count={asks.length} color="var(--color-sell-bright)" />
+                        <div style={{ display: 'flex', gap: '16px' }}>
+                            <ZoneCounter label="Bids" count={bids.length} color="var(--color-buy-bright)" />
+                            <ZoneCounter label="Asks" count={asks.length} color="var(--color-sell-bright)" />
+                        </div>
+
+                        {/* Total Orders */}
+                        <div style={{
+                            padding: '6px 14px',
+                            background: 'rgba(255, 255, 255, 0.03)',
+                            borderRadius: '20px',
+                            border: '1px solid rgba(255, 255, 255, 0.06)',
+                            display: 'flex',
+                            gap: '8px',
+                            alignItems: 'center'
+                        }}>
+                            <span style={{
+                                fontSize: '10px',
+                                color: 'var(--text-tertiary)',
+                                textTransform: 'uppercase',
+                                fontWeight: 600,
+                                letterSpacing: '0.5px'
+                            }}>
+                                Total
+                            </span>
+                            <span style={{
+                                fontSize: '14px',
+                                fontFamily: 'var(--font-mono)',
+                                fontWeight: 700,
+                                color: 'var(--accent-primary)',
+                                textShadow: '0 0 12px var(--accent-glow)'
+                            }}>
+                                {bids.length + asks.length}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
