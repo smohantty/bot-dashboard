@@ -133,7 +133,7 @@ const HeaderMetrics: React.FC = () => {
     const positionIcon = s.position_side === 'Long' ? '📈' : s.position_side === 'Short' ? '📉' : '➖';
     const positionColor = s.position_side === 'Long' ? 'var(--color-buy)' : s.position_side === 'Short' ? 'var(--color-sell)' : 'var(--text-primary)';
 
-    const biasColor = s.grid_bias === 'Long' ? 'var(--color-buy)' : s.grid_bias === 'Short' ? 'var(--color-sell)' : 'var(--accent-primary)';
+    const biasColor = s.grid_bias === 'long' ? 'var(--color-buy)' : s.grid_bias === 'short' ? 'var(--color-sell)' : 'var(--accent-primary)';
 
     return (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>

@@ -60,11 +60,11 @@ const MetricsBar: React.FC = () => {
         perpData?.position_side === 'Short' ? 'var(--color-sell-bright)' :
             'var(--text-secondary)';
 
-    const biasColor = perpData?.grid_bias === 'Long' ? 'var(--color-buy-bright)' :
-        perpData?.grid_bias === 'Short' ? 'var(--color-sell-bright)' : 'var(--accent-primary)';
+    const biasColor = perpData?.grid_bias === 'long' ? 'var(--color-buy-bright)' :
+        perpData?.grid_bias === 'short' ? 'var(--color-sell-bright)' : 'var(--accent-primary)';
 
-    const biasBg = perpData?.grid_bias === 'Long' ? 'var(--color-buy-bg)' :
-        perpData?.grid_bias === 'Short' ? 'var(--color-sell-bg)' : 'var(--accent-subtle)';
+    const biasBg = perpData?.grid_bias === 'long' ? 'var(--color-buy-bg)' :
+        perpData?.grid_bias === 'short' ? 'var(--color-sell-bg)' : 'var(--accent-subtle)';
 
     // Parse symbol to get base/quote asset names (e.g., "LIT/USDC" or "LIT_USDC")
     const symbolParts = s.symbol.includes('/') ? s.symbol.split('/') : s.symbol.split('_');
