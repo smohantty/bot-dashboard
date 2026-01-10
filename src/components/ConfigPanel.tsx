@@ -70,7 +70,7 @@ const ConfigPanel: React.FC = () => {
                     value={`$${config.lower_price.toLocaleString()} – $${config.upper_price.toLocaleString()}`}
                     icon="range"
                 />
-                <ConfigCell label="Zones" value={config.grid_count.toString()} icon="grid" />
+                <ConfigCell label="Zones" value={(config.grid_count ?? 0).toString()} icon="grid" />
 
                 {isPerp ? (
                     <>

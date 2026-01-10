@@ -80,6 +80,10 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode; url: strin
 
                     switch (message.event_type) {
                         case 'config':
+                            // Apply default for optional grid_count
+                            if (message.data.grid_count === undefined) {
+                                message.data.grid_count = 0;
+                            }
                             setConfig(message.data);
                             break;
                         case 'info':

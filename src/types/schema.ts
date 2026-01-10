@@ -8,7 +8,7 @@ export interface StrategyConfig {
     upper_price: number;
     lower_price: number;
     grid_type: 'arithmetic' | 'geometric';
-    grid_count: number;
+    grid_count?: number;
     total_investment: number;
     trigger_price?: number | null;
     // Perp specific

@@ -161,7 +161,6 @@
             "upper_price",
             "lower_price",
             "grid_type",
-            "grid_count",
             "total_investment"
           ],
           "properties": {
@@ -185,7 +184,8 @@
             },
             "grid_count": {
               "type": "integer",
-              "minimum": 2
+              "minimum": 2,
+              "default": 0
             },
             "total_investment": {
               "type": "number"
@@ -215,7 +215,6 @@
             "upper_price",
             "lower_price",
             "grid_type",
-            "grid_count",
             "total_investment",
             "grid_bias"
           ],
@@ -248,7 +247,8 @@
             },
             "grid_count": {
               "type": "integer",
-              "minimum": 2
+              "minimum": 2,
+              "default": 0
             },
             "total_investment": {
               "type": "number",
