@@ -62,11 +62,11 @@ const SummaryCard: React.FC = () => {
             perpData.position_side === 'Short' ? 'var(--color-sell-bright)' :
                 'var(--text-tertiary)';
 
-        const biasColor = perpData.grid_bias === 'Long' ? 'var(--color-buy-bright)' :
-            perpData.grid_bias === 'Short' ? 'var(--color-sell-bright)' : 'var(--accent-primary)';
+        const biasColor = perpData.grid_bias === 'long' ? 'var(--color-buy-bright)' :
+            perpData.grid_bias === 'short' ? 'var(--color-sell-bright)' : 'var(--accent-primary)';
 
-        const biasBg = perpData.grid_bias === 'Long' ? 'var(--color-buy-bg)' :
-            perpData.grid_bias === 'Short' ? 'var(--color-sell-bg)' : 'var(--accent-subtle)';
+        const biasBg = perpData.grid_bias === 'long' ? 'var(--color-buy-bg)' :
+            perpData.grid_bias === 'short' ? 'var(--color-sell-bg)' : 'var(--accent-subtle)';
 
         return (
             <div className="card" style={{

@@ -57,7 +57,7 @@ export interface PerpGridSummary {
     total_profit: number;
     total_fees: number;
     leverage: number;
-    grid_bias: 'Long' | 'Short';
+    grid_bias: 'long' | 'short';
     grid_count: number;
     range_low: number;
     range_high: number;
