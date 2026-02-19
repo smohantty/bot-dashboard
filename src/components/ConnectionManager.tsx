@@ -17,12 +17,20 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
         setConnections(stored);
     }, []);
 
+    const normalizeWsUrl = (url: string): string => {
+        const trimmed = url.trim();
+        if (trimmed.startsWith('ws://') || trimmed.startsWith('wss://')) {
+            return trimmed;
+        }
+        return `ws://${trimmed}`;
+    };
+
     const handleAdd = () => {
         if (!newBotName || !newBotUrl) return;
         const newConnection: BotConnection = {
             id: crypto.randomUUID(),
             name: newBotName,
-            url: newBotUrl
+            url: normalizeWsUrl(newBotUrl)
         };
         const updated = [...connections, newConnection];
         setConnections(updated);
