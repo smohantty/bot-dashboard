@@ -1,25 +1,15 @@
 # WebSocket Event Schemas
 
-This directory contains the authoritative JSON schema definition for the WebSocket events used by the trading bots and the dashboard.
+The authoritative JSON Schema is maintained in the shared [bot-ws-schema](https://github.com/smohantty/bot-ws-schema) repo, included here as a git submodule at `schema/bot-ws-schema/`.
 
-## Purpose
+## Source of Truth
 
-The `schema.json` file serves as the **primary source of truth** for the data structure exchanged between the backend trading bots and the frontend dashboard. To ensure compatibility, language-specific type definitions should align with this schema.
+- **Schema**: `bot-ws-schema/schema/events.json` (git submodule)
+- **Frontend types**: [`src/types/schema.ts`](../src/types/schema.ts) (must match the schema)
 
-## Files
+## Updating the Schema
 
-- **`schema.json`**: JSON Schema definition.
-
-## Implementation Locations
-
-Language-specific implementations are maintained in their respective source directories:
-
-- **Frontend (TypeScript)**: [`src/types/schema.ts`](../src/types/schema.ts)
-- **Lighter Bot (Python)**: `src/strategy/types.py` (in the bot repository)
-
-## Usage
-
-When making changes to the event structures:
-1. Update `schema.json` to define the new structure.
-2. Update the frontend types in `src/types/schema.ts`.
-3. Update the backend bot types in `src/strategy/types.py`.
+1. Make changes in the `bot-ws-schema` repo first.
+2. Update the submodule: `git submodule update --remote schema/bot-ws-schema`
+3. Update `src/types/schema.ts` to match.
+4. Commit the submodule pointer change and type updates together.

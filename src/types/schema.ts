@@ -57,7 +57,7 @@ export interface PerpGridSummary {
     total_profit: number;
     total_fees: number;
     leverage: number;
-    grid_bias: 'long' | 'short';
+    grid_bias: 'long' | 'short' | 'neutral';
     grid_count: number;
     range_low: number;
     range_high: number;
@@ -65,6 +65,8 @@ export interface PerpGridSummary {
     roundtrips: number;
     margin_balance: number;
     initial_entry_price?: number;
+    avg_entry_price?: number;
+    unrealized_pnl?: number;
 }
 
 // Union type for any strategy summary
