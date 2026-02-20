@@ -5,8 +5,8 @@
 export interface StrategyConfig {
     type: 'spot_grid' | 'perp_grid';
     symbol: string;
-    upper_price: number;
-    lower_price: number;
+    grid_range_high: number;
+    grid_range_low: number;
     grid_type: 'arithmetic' | 'geometric';
     grid_count?: number;
     total_investment: number;
@@ -39,8 +39,8 @@ export interface SpotGridSummary {
     total_fees: number;
     initial_entry_price?: number;
     grid_count: number;
-    range_low: number;
-    range_high: number;
+    grid_range_low: number;
+    grid_range_high: number;
     grid_spacing_pct: [number, number]; // (min%, max%) - same for geometric, different for arithmetic
     roundtrips: number;
     base_balance: number;
@@ -59,8 +59,8 @@ export interface PerpGridSummary {
     leverage: number;
     grid_bias: 'long' | 'short' | 'neutral';
     grid_count: number;
-    range_low: number;
-    range_high: number;
+    grid_range_low: number;
+    grid_range_high: number;
     grid_spacing_pct: [number, number]; // (min%, max%) - same for geometric, different for arithmetic
     roundtrips: number;
     margin_balance: number;

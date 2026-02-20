@@ -119,7 +119,7 @@ const HeaderMetrics: React.FC = () => {
                 <MetricCard
                     label="GRID"
                     value={`${s.grid_count} zones`}
-                    subValue={`${s.range_low.toFixed(2)} - ${s.range_high.toFixed(2)} • ${s.roundtrips} roundtrips`}
+                    subValue={`${s.grid_range_low.toFixed(2)} - ${s.grid_range_high.toFixed(2)} • ${s.roundtrips} roundtrips`}
                 />
             </div>
         );
@@ -164,7 +164,7 @@ const HeaderMetrics: React.FC = () => {
             <MetricCard
                 label="GRID"
                 value={`${s.grid_count} zones`}
-                subValue={`${s.range_low.toFixed(2)} - ${s.range_high.toFixed(2)} • ${s.roundtrips} roundtrips`}
+                subValue={`${s.grid_range_low.toFixed(2)} - ${s.grid_range_high.toFixed(2)} • ${s.roundtrips} roundtrips`}
             />
         </div>
     );
