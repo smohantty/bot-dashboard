@@ -13,21 +13,12 @@ const DashboardContent: React.FC = () => {
       <MetricsBar />
 
       {/* Main Content Grid - OrderBook as focus */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 340px',
-        gap: '16px',
-        marginTop: '16px'
-      }}>
+      <div className="dashboard-grid">
         {/* Left: Order Book (main focus) */}
         <OrderBook />
 
         {/* Right: Config + Activity stacked */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px'
-        }}>
+        <div className="dashboard-side-column">
           <ConfigPanel />
           <ActivityLog />
         </div>

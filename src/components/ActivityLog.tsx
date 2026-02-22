@@ -21,8 +21,8 @@ const ActivityLog: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
-            minHeight: '160px',
-            maxHeight: '350px',
+            minHeight: '130px',
+            maxHeight: '280px',
             animationDelay: '160ms'
         }}>
             {/* Header */}
@@ -33,7 +33,7 @@ const ActivityLog: React.FC = () => {
                         height: '28px',
                         borderRadius: '8px',
                         background: 'var(--accent-subtle)',
-                        border: '1px solid rgba(0, 245, 212, 0.15)',
+                        border: '1px solid var(--border-accent)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
@@ -56,14 +56,14 @@ const ActivityLog: React.FC = () => {
             {orderHistory.length > 0 && (
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: '1fr 80px 80px 70px',
-                    padding: '8px 16px',
-                    fontSize: '10px',
-                    color: 'var(--text-tertiary)',
-                    letterSpacing: '0.5px',
+                    gridTemplateColumns: '1fr 72px 72px 60px',
+                    padding: '6px 12px',
+                    fontSize: '9px',
+                    color: 'var(--text-secondary)',
+                    letterSpacing: '0.3px',
                     fontWeight: 600,
                     borderBottom: '1px solid var(--border-color)',
-                    background: 'var(--bg-hover)',
+                    background: 'linear-gradient(180deg, var(--bg-hover) 0%, transparent 100%)',
                     alignItems: 'center'
                 }}>
                     <span>Order</span>
@@ -181,10 +181,10 @@ const OrderEventRow: React.FC<{
         <div
             style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 80px 80px 70px',
+                gridTemplateColumns: '1fr 72px 72px 60px',
                 alignItems: 'center',
-                padding: '10px 16px',
-                fontSize: '11px',
+                padding: '8px 12px',
+                fontSize: '10px',
                 borderBottom: '1px solid var(--border-color)',
                 background: isFirst
                     ? 'var(--accent-subtle)'
@@ -214,17 +214,19 @@ const OrderEventRow: React.FC<{
                     borderRadius: '4px',
                     fontSize: '9px',
                     fontWeight: 600,
-                    letterSpacing: '0.3px',
+                    letterSpacing: '0.2px',
                     background: sideBg,
                     color: sideColor,
-                    border: `1px solid ${sideColor}25`
+                    border: isBuy
+                        ? '1px solid rgba(34, 197, 94, 0.28)'
+                        : '1px solid rgba(239, 68, 68, 0.28)'
                 }}>
                     {isBuy ? 'BUY' : 'SELL'}
                 </span>
 
                 {/* Status text (subtle) */}
                 <span style={{
-                    fontSize: '9px',
+                    fontSize: '8px',
                     color: 'var(--text-muted)',
                     textTransform: 'lowercase'
                 }}>

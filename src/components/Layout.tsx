@@ -22,16 +22,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '0 32px',
-                height: '60px',
-                background: 'var(--bg-panel)',
+                padding: '7px clamp(8px, 1.4vw, 16px)',
+                minHeight: '52px',
+                height: 'auto',
+                gap: '8px',
+                flexWrap: 'wrap',
+                background: 'linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-glass) 100%)',
                 backdropFilter: 'blur(24px) saturate(160%)',
-                borderBottom: '1px solid var(--border-subtle)',
+                borderBottom: '1px solid var(--border-color)',
                 position: 'sticky',
                 top: 0,
                 zIndex: 100,
                 animation: 'fadeIn 0.5s ease-out',
-                transition: 'background var(--transition-normal), border-color var(--transition-normal)'
+                boxShadow: '0 10px 30px rgba(2, 7, 16, 0.45)',
+                transition: 'background var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal)'
             }}>
                 {/* Accent line at bottom */}
                 <div style={{
@@ -41,22 +45,28 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     right: 0,
                     height: '1px',
                     background: 'linear-gradient(90deg, transparent 0%, var(--accent-primary) 50%, transparent 100%)',
-                    opacity: 0.25
+                    opacity: 0.35
                 }} />
 
                 {/* Left: Logo & Nav */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '36px' }}>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'clamp(14px, 2.4vw, 36px)',
+                    flexWrap: 'wrap',
+                    minWidth: 0
+                }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         {/* Logo Icon */}
                         <div style={{
-                            width: '36px',
-                            height: '36px',
-                            borderRadius: '10px',
+                            width: '34px',
+                            height: '34px',
+                            borderRadius: '9px',
                             background: 'linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            boxShadow: '0 0 20px var(--accent-glow)',
+                            boxShadow: '0 12px 30px var(--accent-glow)',
                             position: 'relative',
                             overflow: 'hidden'
                         }}>
@@ -86,7 +96,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                             <span style={{
                                 fontSize: '10px',
                                 color: 'var(--text-tertiary)',
-                                letterSpacing: '0.8px',
+                                letterSpacing: '0.75px',
                                 textTransform: 'uppercase',
                                 fontWeight: 500
                             }}>
@@ -96,7 +106,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     </div>
 
                     {/* Nav Items */}
-                    <nav style={{ display: 'flex', gap: '4px' }}>
+                    <nav style={{
+                        display: 'flex',
+                        gap: '4px',
+                        padding: '3px',
+                        borderRadius: '999px',
+                        border: '1px solid var(--border-subtle)',
+                        background: 'var(--bg-hover)',
+                        overflowX: 'auto'
+                    }}>
                         <NavItem label="Dashboard" active />
                         <NavItem label="Analytics" />
                         <NavItem label="Settings" />
@@ -104,7 +122,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </div>
 
                 {/* Right: Theme Toggle + Network */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
                     {/* Theme Toggle */}
                     <button
                         className="theme-toggle"
@@ -136,14 +154,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '8px',
-                            padding: '6px 12px',
+                            padding: '5px 10px',
                             borderRadius: 'var(--radius-sm)',
                             background: systemInfo.network === 'mainnet'
                                 ? 'var(--color-buy-bg)'
                                 : 'var(--accent-purple-glow)',
                             border: `1px solid ${systemInfo.network === 'mainnet'
                                 ? 'rgba(34, 197, 94, 0.2)'
-                                : 'rgba(168, 85, 247, 0.2)'}`,
+                                : 'rgba(79, 124, 255, 0.24)'}`,
+                            boxShadow: systemInfo.network === 'mainnet'
+                                ? '0 0 16px var(--color-buy-glow)'
+                                : '0 0 16px var(--accent-purple-glow)',
                             transition: 'all var(--transition-normal)'
                         }}>
                             <div style={{
@@ -160,7 +181,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                             <span style={{
                                 fontSize: '10px',
                                 fontWeight: 600,
-                                letterSpacing: '0.5px',
+                                letterSpacing: '0.4px',
                                 color: systemInfo.network === 'mainnet'
                                     ? 'var(--color-buy-bright)'
                                     : 'var(--accent-purple)',
@@ -176,8 +197,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {/* Main Content */}
             <main style={{
                 flex: 1,
-                padding: '32px 36px',
-                maxWidth: '1560px',
+                padding: '10px clamp(8px, 1.5vw, 14px) 12px',
+                maxWidth: '1520px',
                 width: '100%',
                 margin: '0 auto'
             }}>
@@ -193,35 +214,26 @@ const NavItem: React.FC<{ label: string; active?: boolean }> = ({ label, active 
     return (
         <button
             style={{
-                background: active ? 'var(--accent-subtle)' : isHovered ? 'var(--bg-hover)' : 'transparent',
-                border: 'none',
-                padding: '8px 16px',
-                borderRadius: 'var(--radius-sm)',
-                fontSize: '13px',
-                fontWeight: 500,
-                color: active ? 'var(--accent-primary)' : isHovered ? 'var(--text-secondary)' : 'var(--text-tertiary)',
+                background: active
+                    ? 'linear-gradient(135deg, var(--accent-subtle) 0%, rgba(255, 255, 255, 0.02) 100%)'
+                    : isHovered ? 'var(--bg-card)' : 'transparent',
+                border: active ? '1px solid var(--border-accent)' : '1px solid transparent',
+                padding: '6px 12px',
+                borderRadius: '999px',
+                fontSize: '12px',
+                fontWeight: active ? 600 : 500,
+                color: active ? 'var(--accent-primary)' : isHovered ? 'var(--text-secondary)' : 'var(--text-secondary)',
                 cursor: 'pointer',
                 transition: 'all var(--transition-fast)',
                 position: 'relative',
-                fontFamily: 'inherit'
+                fontFamily: 'inherit',
+                whiteSpace: 'nowrap',
+                boxShadow: active ? '0 0 20px var(--accent-glow)' : 'none'
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
             {label}
-            {active && (
-                <div style={{
-                    position: 'absolute',
-                    bottom: '0px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '24px',
-                    height: '2px',
-                    background: 'var(--accent-primary)',
-                    borderRadius: '2px',
-                    boxShadow: '0 0 10px var(--accent-glow)'
-                }} />
-            )}
         </button>
     );
 };

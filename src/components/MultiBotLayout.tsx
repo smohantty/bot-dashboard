@@ -48,32 +48,49 @@ const MultiBotLayout: React.FC<MultiBotLayoutProps> = ({ children }) => {
             <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'var(--bg-panel)',
+                background: 'linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-glass) 100%)',
                 backdropFilter: 'blur(20px) saturate(160%)',
                 borderBottom: '1px solid var(--border-color)',
-                padding: '0 16px',
-                height: '48px',
+                padding: '0 clamp(8px, 1.6vw, 12px)',
+                height: '44px',
+                gap: '8px',
+                position: 'relative',
+                boxShadow: '0 6px 18px rgba(2, 7, 16, 0.3)',
                 flexShrink: 0,
                 transition: 'background var(--transition-normal), border-color var(--transition-normal)'
             }}>
-                <div style={{ display: 'flex', gap: '4px', flex: 1, overflowX: 'auto' }}>
+                <div style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '1px',
+                    background: 'linear-gradient(90deg, transparent 0%, var(--accent-primary) 50%, transparent 100%)',
+                    opacity: 0.25
+                }} />
+
+                <div style={{ display: 'flex', gap: '4px', flex: 1, overflowX: 'auto', padding: '2px 0' }}>
                     {connections.map(conn => (
                         <button
                             key={conn.id}
                             onClick={() => setActiveTabId(conn.id)}
                             style={{
-                                padding: '8px 16px',
-                                background: activeTabId === conn.id ? 'var(--bg-hover)' : 'transparent',
+                                padding: '6px 10px',
+                                background: activeTabId === conn.id
+                                    ? 'linear-gradient(135deg, var(--accent-subtle) 0%, rgba(255, 255, 255, 0.02) 100%)'
+                                    : 'transparent',
                                 color: activeTabId === conn.id ? 'var(--text-primary)' : 'var(--text-tertiary)',
-                                border: 'none',
-                                borderBottom: activeTabId === conn.id ? '2px solid var(--accent-primary)' : '2px solid transparent',
+                                border: activeTabId === conn.id ? '1px solid var(--border-accent)' : '1px solid transparent',
                                 cursor: 'pointer',
                                 whiteSpace: 'nowrap',
-                                fontWeight: activeTabId === conn.id ? 600 : 400,
-                                transition: 'all 0.2s',
-                                fontSize: '13px',
+                                borderRadius: '10px',
+                                fontWeight: activeTabId === conn.id ? 600 : 500,
+                                boxShadow: activeTabId === conn.id ? '0 0 16px var(--accent-glow)' : 'none',
+                                transition: 'all var(--transition-fast)',
+                                fontSize: '11px',
                                 fontFamily: 'inherit',
-                                letterSpacing: '-0.01em'
+                                letterSpacing: '-0.01em',
+                                lineHeight: 1.2
                             }}
                         >
                             {conn.name}
@@ -81,19 +98,20 @@ const MultiBotLayout: React.FC<MultiBotLayoutProps> = ({ children }) => {
                     ))}
                 </div>
 
-                <div style={{ marginLeft: '16px' }}>
+                <div style={{ marginLeft: '10px' }}>
                     <button
                         onClick={() => setShowManager(true)}
                         style={{
-                            padding: '6px 12px',
+                            padding: '6px 10px',
                             background: 'var(--bg-hover)',
                             color: 'var(--text-secondary)',
                             border: '1px solid var(--border-subtle)',
                             borderRadius: 'var(--radius-sm)',
                             cursor: 'pointer',
-                            fontSize: '12px',
+                            fontSize: '11px',
+                            fontWeight: 500,
                             fontFamily: 'inherit',
-                            transition: 'all 0.2s'
+                            transition: 'all var(--transition-fast)'
                         }}
                     >
                         Manage Bots

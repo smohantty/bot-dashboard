@@ -34,13 +34,13 @@ const ConfigPanel: React.FC = () => {
                         width: '28px',
                         height: '28px',
                         borderRadius: '8px',
-                        background: 'var(--bg-hover)',
+                        background: 'var(--accent-subtle)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        border: '1px solid var(--border-color)'
+                        border: '1px solid var(--border-accent)'
                     }}>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" strokeWidth="2">
                             <circle cx="12" cy="12" r="3" />
                             <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
                         </svg>
@@ -200,12 +200,12 @@ const ConfigCell: React.FC<{
     return (
         <div
             style={{
-                padding: '12px 16px',
+                padding: '10px 12px',
                 borderRight: isLast ? 'none' : '1px solid var(--border-color)',
                 borderBottom: '1px solid var(--border-color)',
                 background: isHovered
                     ? 'var(--bg-hover)'
-                    : highlight ? 'var(--accent-subtle)' : 'transparent',
+                    : highlight ? 'linear-gradient(180deg, var(--accent-subtle) 0%, transparent 100%)' : 'transparent',
                 transition: 'all var(--transition-fast)'
             }}
             onMouseEnter={() => setIsHovered(true)}
@@ -217,13 +217,13 @@ const ConfigCell: React.FC<{
                 gap: '6px',
                 fontSize: '9px',
                 color: 'var(--text-tertiary)',
-                marginBottom: '6px',
-                letterSpacing: '0.2px',
+                marginBottom: '4px',
+                letterSpacing: '0.25px',
                 fontWeight: 500
             }}>
                 {icon && (
                     <span style={{
-                        opacity: 0.6,
+                        opacity: 0.72,
                         color: highlight ? highlightColor : 'inherit'
                     }}>
                         {icons[icon]}
@@ -245,16 +245,16 @@ const ConfigCell: React.FC<{
                 color: highlight ? (highlightColor || 'var(--accent-primary)') : 'var(--text-primary)',
                 fontFamily: 'var(--font-mono)',
                 letterSpacing: '-0.02em',
-                textShadow: highlight ? `0 0 20px ${highlightColor || 'var(--accent-glow)'}40` : 'none'
+                textShadow: highlight ? '0 0 16px var(--accent-glow)' : 'none'
             }}>
                 {value}
             </div>
             {subValue && (
                 <div style={{
-                    fontSize: '10px',
+                    fontSize: '9px',
                     color: 'var(--text-tertiary)',
-                    marginTop: '4px',
-                    letterSpacing: '0.3px'
+                    marginTop: '3px',
+                    letterSpacing: '0.2px'
                 }}>
                     {subValue}
                 </div>

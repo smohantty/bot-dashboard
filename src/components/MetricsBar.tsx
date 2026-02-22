@@ -66,6 +66,12 @@ const MetricsBar: React.FC = () => {
     const biasBg = perpData?.grid_bias === 'long' ? 'var(--color-buy-bg)' :
         perpData?.grid_bias === 'short' ? 'var(--color-sell-bg)' : 'var(--accent-subtle)';
 
+    const biasBorder = perpData?.grid_bias === 'long'
+        ? 'rgba(34, 197, 94, 0.28)'
+        : perpData?.grid_bias === 'short'
+            ? 'rgba(239, 68, 68, 0.28)'
+            : 'rgba(27, 224, 218, 0.28)';
+
     // Parse symbol to get base/quote asset names (e.g., "LIT/USDC" or "LIT_USDC")
     const symbolParts = s.symbol.includes('/') ? s.symbol.split('/') : s.symbol.split('_');
     const baseAsset = symbolParts[0] || s.symbol;
@@ -90,21 +96,26 @@ const MetricsBar: React.FC = () => {
             <div style={{
                 display: 'flex',
                 alignItems: 'stretch',
+                flexWrap: 'wrap',
+                gap: '0',
                 background: `linear-gradient(180deg, var(--card-gradient-start) 0%, transparent 100%)`,
                 borderBottom: '1px solid var(--border-color)'
             }}>
                 {/* Symbol + Price Section */}
                 <div style={{
-                    padding: '14px 20px',
+                    padding: '10px 10px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '14px',
+                    gap: '12px',
+                    flex: '0 0 auto',
+                    width: 'clamp(220px, 26vw, 320px)',
+                    minWidth: '250px',
                     borderRight: '1px solid var(--border-color)',
-                    background: `linear-gradient(135deg, var(--accent-subtle) 0%, transparent 60%)`
+                    background: `linear-gradient(135deg, var(--accent-subtle) 0%, transparent 72%)`
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{
-                            fontSize: '16px',
+                            fontSize: '15px',
                             fontWeight: 700,
                             letterSpacing: '-0.02em',
                             color: 'var(--text-primary)'
@@ -112,22 +123,22 @@ const MetricsBar: React.FC = () => {
                             {s.symbol}
                         </span>
                         <span style={{
-                            padding: '3px 6px',
+                            padding: '2px 6px',
                             borderRadius: 'var(--radius-sm)',
-                            fontSize: '8px',
+                            fontSize: '9px',
                             fontWeight: 600,
-                            letterSpacing: '0.4px',
+                            letterSpacing: '0.35px',
                             background: isPerp ? biasBg : 'var(--bg-hover)',
                             color: isPerp ? biasColor : 'var(--text-secondary)',
-                            border: `1px solid ${isPerp ? biasColor : 'var(--text-secondary)'}20`
+                            border: isPerp ? `1px solid ${biasBorder}` : '1px solid var(--border-subtle)'
                         }}>
                             {isPerp ? perpData?.grid_bias?.toUpperCase() : 'SPOT'}
                         </span>
                         {isPerp && perpData?.leverage && (
                             <span style={{
-                                padding: '3px 6px',
+                                padding: '2px 6px',
                                 borderRadius: 'var(--radius-sm)',
-                                fontSize: '8px',
+                                fontSize: '9px',
                                 fontWeight: 600,
                                 background: 'var(--accent-gold-subtle)',
                                 color: 'var(--accent-gold)',
@@ -138,12 +149,12 @@ const MetricsBar: React.FC = () => {
                         )}
                     </div>
                     <div style={{
-                        fontSize: '20px',
+                        fontSize: '19px',
                         fontWeight: 700,
                         fontFamily: 'var(--font-mono)',
                         color: 'var(--text-primary)',
                         letterSpacing: '-0.03em',
-                        minWidth: '100px'
+                        minWidth: '88px'
                     }}>
                         {formatPrice(lastPrice || 0)}
                     </div>
@@ -171,16 +182,17 @@ const MetricsBar: React.FC = () => {
                     valueColor="var(--color-sell-bright)"
                 />
 
-                {/* Spacer */}
-                <div style={{ flex: 1 }} />
+                {/* Keep right-side status anchored while left metrics stay grouped */}
+                <div style={{ flex: '1 1 120px', minWidth: '24px' }} />
 
                 {/* Status + Uptime */}
                 <div style={{
-                    padding: '14px 20px',
+                    padding: '10px 12px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '14px',
-                    borderLeft: '1px solid var(--border-color)'
+                    gap: '10px',
+                    borderLeft: '1px solid var(--border-color)',
+                    minWidth: '142px'
                 }}>
                     <ConnectionStatus status={connectionStatus} />
                     <Tooltip content="Bot running time">
@@ -195,7 +207,7 @@ const MetricsBar: React.FC = () => {
                                 <path d="M12 6v6l4 2" />
                             </svg>
                             <span style={{
-                                fontSize: '10px',
+                                fontSize: '9px',
                                 color: 'var(--text-tertiary)',
                                 fontFamily: 'var(--font-mono)'
                             }}>
@@ -210,8 +222,11 @@ const MetricsBar: React.FC = () => {
             <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                padding: '10px 0',
-                background: 'var(--bg-hover)'
+                flexWrap: 'wrap',
+                rowGap: '6px',
+                columnGap: '6px',
+                padding: '6px 8px',
+                background: 'linear-gradient(180deg, var(--bg-hover) 0%, transparent 100%)'
             }}>
                 {isPerp ? (
                     // Perp Grid Row 2
@@ -264,7 +279,6 @@ const MetricsBar: React.FC = () => {
                         />
                     </>
                 )}
-                <div style={{ flex: 1 }} />
             </div>
         </div>
     );
@@ -278,20 +292,21 @@ const MetricCell: React.FC<{
     highlight?: boolean;
 }> = ({ label, value, valueColor, highlight }) => (
     <div style={{
-        padding: '10px 16px',
+        padding: '8px 12px',
         borderRight: '1px solid var(--border-color)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         background: highlight ? 'var(--accent-subtle)' : 'transparent',
-        minWidth: '75px'
+        minWidth: '112px'
     }}>
         <div style={{
-            fontSize: '10px',
+            fontSize: '8px',
             color: 'var(--text-tertiary)',
-            letterSpacing: '0.2px',
+            letterSpacing: '0.35px',
             fontWeight: 500,
-            marginBottom: '3px'
+            textTransform: 'uppercase',
+            marginBottom: '2px'
         }}>
             {label}
         </div>
@@ -301,7 +316,7 @@ const MetricCell: React.FC<{
             color: valueColor || 'var(--text-primary)',
             fontFamily: 'var(--font-mono)',
             letterSpacing: '-0.02em',
-            textShadow: highlight ? `0 0 20px ${valueColor}40` : 'none',
+            textShadow: highlight ? '0 0 16px var(--accent-glow)' : 'none',
             whiteSpace: 'nowrap'
         }}>
             {value}
@@ -318,18 +333,19 @@ const MetricCellCompact: React.FC<{
     highlight?: boolean;
 }> = ({ label, value, subValue, valueColor, highlight }) => (
     <div style={{
-        padding: '4px 20px',
+        padding: '4px 10px',
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
-        borderRight: '1px solid var(--border-subtle)',
+        gap: '6px',
+        border: highlight ? '1px solid var(--border-accent)' : '1px solid var(--border-color)',
         background: highlight ? 'var(--accent-subtle)' : 'transparent',
-        borderRadius: highlight ? 'var(--radius-sm)' : undefined
+        borderRadius: highlight ? '999px' : undefined,
+        flex: '0 0 auto'
     }}>
         <span style={{
-            fontSize: '10px',
+            fontSize: '8px',
             color: highlight ? 'var(--accent-primary)' : 'var(--text-tertiary)',
-            letterSpacing: '0.2px',
+            letterSpacing: '0.28px',
             fontWeight: highlight ? 600 : 500
         }}>
             {label}
@@ -340,7 +356,7 @@ const MetricCellCompact: React.FC<{
             color: valueColor || 'var(--text-primary)',
             fontFamily: 'var(--font-mono)',
             letterSpacing: '-0.02em',
-            textShadow: highlight ? `0 0 15px ${valueColor || 'var(--accent-primary)'}60` : 'none'
+            textShadow: highlight ? '0 0 14px var(--accent-glow)' : 'none'
         }}>
             {value}
         </span>
@@ -362,18 +378,21 @@ const ConnectionStatus: React.FC<{ status: 'connected' | 'connecting' | 'disconn
             label: 'Live',
             color: 'var(--color-buy)',
             bgColor: 'var(--color-buy-bg)',
+            borderColor: 'rgba(34, 197, 94, 0.32)',
             dotClass: 'connected'
         },
         connecting: {
             label: 'Connecting',
             color: 'var(--color-warning)',
             bgColor: 'rgba(245, 158, 11, 0.1)',
+            borderColor: 'rgba(245, 158, 11, 0.32)',
             dotClass: 'connecting'
         },
         disconnected: {
             label: 'Offline',
             color: 'var(--color-sell)',
             bgColor: 'var(--color-sell-bg)',
+            borderColor: 'rgba(239, 68, 68, 0.32)',
             dotClass: 'disconnected'
         }
     };
@@ -385,17 +404,17 @@ const ConnectionStatus: React.FC<{ status: 'connected' | 'connecting' | 'disconn
             display: 'flex',
             alignItems: 'center',
             gap: '5px',
-            padding: '4px 8px',
+            padding: '3px 7px',
             borderRadius: 'var(--radius-sm)',
             background: cfg.bgColor,
-            border: `1px solid ${cfg.color}30`
+            border: `1px solid ${cfg.borderColor}`
         }}>
             <div className={`status-dot ${cfg.dotClass}`} style={{ width: '5px', height: '5px' }} />
             <span style={{
                 fontSize: '9px',
                 fontWeight: 600,
                 color: cfg.color,
-                letterSpacing: '0.3px',
+                letterSpacing: '0.35px',
                 textTransform: 'uppercase'
             }}>
                 {cfg.label}

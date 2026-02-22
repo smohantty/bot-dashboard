@@ -72,8 +72,8 @@ const OrderBook: React.FC = () => {
                         width: '28px',
                         height: '28px',
                         borderRadius: '8px',
-                        background: 'var(--bg-hover)',
-                        border: '1px solid var(--border-color)',
+                        background: 'var(--accent-subtle)',
+                        border: '1px solid var(--border-accent)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
@@ -102,17 +102,18 @@ const OrderBook: React.FC = () => {
             </div>
 
             {/* CLOB Layout - Prices meet in the middle */}
-            <div style={{ display: 'flex', minHeight: '280px' }}>
+            <div style={{ overflowX: 'auto' }}>
+                <div style={{ display: 'flex', minHeight: '248px', minWidth: '720px' }}>
                 {/* Bids Side */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                     {/* Header: Size | Trades | Dist | Price (for bids, price on right near center) */}
                     <div style={{
                         display: 'grid',
                         gridTemplateColumns: isPerp ? '28px 1.2fr 0.8fr 0.9fr 1.5fr' : '1.2fr 0.8fr 0.9fr 1.5fr',
-                        padding: '12px 16px',
+                        padding: '8px 12px',
                         fontSize: '10px',
-                        color: 'var(--text-tertiary)',
-                        letterSpacing: '0.6px',
+                        color: 'var(--text-secondary)',
+                        letterSpacing: '0.35px',
                         fontWeight: 600,
                         borderBottom: '1px solid var(--border-color)',
                         background: `linear-gradient(90deg, var(--color-buy-bg) 0%, transparent 100%)`
@@ -126,7 +127,7 @@ const OrderBook: React.FC = () => {
                     <div style={{
                         flex: 1,
                         overflowY: 'auto',
-                        maxHeight: '240px',
+                        maxHeight: '216px',
                         display: 'flex',
                         flexDirection: 'column'
                     }}>
@@ -153,13 +154,13 @@ const OrderBook: React.FC = () => {
 
                 {/* Center Price Column */}
                 <div style={{
-                    width: '120px',
+                    width: '106px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '16px 10px',
-                    background: 'var(--bg-panel)',
+                    padding: '10px 8px',
+                    background: 'linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-card) 100%)',
                     borderLeft: '1px solid var(--border-color)',
                     borderRight: '1px solid var(--border-color)',
                     position: 'relative'
@@ -167,29 +168,29 @@ const OrderBook: React.FC = () => {
                     {/* Decorative glow */}
                     <div style={{
                         position: 'absolute',
-                        width: '80px',
-                        height: '80px',
+                        width: '86px',
+                        height: '86px',
                         borderRadius: '50%',
                         background: 'var(--accent-glow)',
-                        filter: 'blur(35px)',
-                        opacity: 0.4
+                        filter: 'blur(34px)',
+                        opacity: 0.32
                     }} />
 
                     <div style={{
                         fontSize: '9px',
                         color: 'var(--text-tertiary)',
-                        marginBottom: '8px',
-                        letterSpacing: '0.8px',
+                        marginBottom: '6px',
+                        letterSpacing: '0.6px',
                         fontWeight: 600
                     }}>
                         Current
                     </div>
                     <div style={{
-                        fontSize: '18px',
+                        fontSize: '17px',
                         fontWeight: 700,
                         fontFamily: 'var(--font-mono)',
                         color: 'var(--text-primary)',
-                        textShadow: '0 0 25px var(--accent-glow)',
+                        textShadow: '0 0 18px var(--accent-glow)',
                         position: 'relative',
                         zIndex: 1,
                         letterSpacing: '-0.03em'
@@ -199,10 +200,10 @@ const OrderBook: React.FC = () => {
 
                     {/* Zone counts */}
                     <div style={{
-                        marginTop: '14px',
+                        marginTop: '10px',
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '10px',
+                        gap: '8px',
                         position: 'relative',
                         zIndex: 1,
                         alignItems: 'center'
@@ -214,16 +215,16 @@ const OrderBook: React.FC = () => {
 
                         {/* Total Orders */}
                         <div style={{
-                            padding: '6px 14px',
-                            background: 'var(--bg-hover)',
-                            borderRadius: '20px',
+                            padding: '4px 10px',
+                            background: 'linear-gradient(180deg, var(--bg-hover) 0%, transparent 100%)',
+                            borderRadius: '14px',
                             border: '1px solid var(--border-subtle)',
                             display: 'flex',
-                            gap: '8px',
+                            gap: '6px',
                             alignItems: 'center'
                         }}>
                             <span style={{
-                                fontSize: '10px',
+                                fontSize: '9px',
                                 color: 'var(--text-tertiary)',
                                 textTransform: 'uppercase',
                                 fontWeight: 600,
@@ -232,11 +233,11 @@ const OrderBook: React.FC = () => {
                                 Total
                             </span>
                             <span style={{
-                                fontSize: '14px',
+                                fontSize: '13px',
                                 fontFamily: 'var(--font-mono)',
                                 fontWeight: 700,
                                 color: 'var(--accent-primary)',
-                                textShadow: '0 0 12px var(--accent-glow)'
+                                textShadow: '0 0 10px var(--accent-glow)'
                             }}>
                                 {bids.length + asks.length}
                             </span>
@@ -250,10 +251,10 @@ const OrderBook: React.FC = () => {
                     <div style={{
                         display: 'grid',
                         gridTemplateColumns: isPerp ? '1.5fr 0.9fr 0.8fr 1.2fr 28px' : '1.5fr 0.9fr 0.8fr 1.2fr',
-                        padding: '12px 16px',
+                        padding: '8px 12px',
                         fontSize: '10px',
-                        color: 'var(--text-tertiary)',
-                        letterSpacing: '0.6px',
+                        color: 'var(--text-secondary)',
+                        letterSpacing: '0.35px',
                         fontWeight: 600,
                         borderBottom: '1px solid var(--border-color)',
                         background: `linear-gradient(270deg, var(--color-sell-bg) 0%, transparent 100%)`
@@ -267,7 +268,7 @@ const OrderBook: React.FC = () => {
                     <div style={{
                         flex: 1,
                         overflowY: 'auto',
-                        maxHeight: '240px'
+                        maxHeight: '216px'
                     }}>
                         {asks.length === 0 ? (
                             <EmptyState side="asks" />
@@ -290,6 +291,7 @@ const OrderBook: React.FC = () => {
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     );
 };
@@ -299,19 +301,19 @@ const ZoneCounter: React.FC<{ label: string; count: number; color: string }> = (
         <div style={{
             color: color,
             fontWeight: 700,
-            fontSize: '18px',
+            fontSize: '16px',
             fontFamily: 'var(--font-mono)',
-            textShadow: `0 0 16px ${color}50`,
+            textShadow: '0 0 14px var(--accent-glow)',
             letterSpacing: '-0.02em'
         }}>
             {count}
         </div>
         <div style={{
             color: 'var(--text-tertiary)',
-            fontSize: '9px',
+            fontSize: '8px',
             textTransform: 'uppercase',
-            letterSpacing: '0.6px',
-            marginTop: '4px',
+            letterSpacing: '0.45px',
+            marginTop: '2px',
             fontWeight: 500
         }}>
             {label}
@@ -376,16 +378,17 @@ const ZoneRow: React.FC<{
         : `${distancePercent.toFixed(2)}%`;
 
     // Use consistent color for distance display
-    const distanceColor = 'var(--text-secondary)';
+    const distanceColor = 'var(--text-tertiary)';
 
     // Calculate depth opacity (closer = brighter)
-    const depthOpacity = zone.has_order ? 1 : 0.35;
-    const rowBrightness = isNearSpread ? 1 : Math.max(0.6, 1 - (zoneIndex / totalZones) * 0.4);
+    const depthOpacity = zone.has_order ? 1 : 0.55;
+    const rowBrightness = isNearSpread ? 1 : Math.max(0.72, 1 - (zoneIndex / totalZones) * 0.28);
 
     // Row background based on side and alternating pattern
     const sideColor = isAsk ? 'var(--color-sell-bg)' : 'var(--color-buy-bg)';
     const altRowBg = zoneIndex % 2 === 1 ? 'var(--bg-row-alt)' : 'transparent';
     const baseRowBg = isNearSpread ? sideColor : altRowBg;
+    const hoverBg = isAsk ? 'rgba(239, 68, 68, 0.08)' : 'rgba(34, 197, 94, 0.08)';
 
     // Perp position indicator
     const perpIndicator = isPerp ? (
@@ -420,14 +423,14 @@ const ZoneRow: React.FC<{
             alignItems: isAsk ? 'flex-start' : 'flex-end',
             gap: '1px'
         }}>
-            <span style={{
-                color: isAsk ? 'var(--color-sell-bright)' : 'var(--color-buy-bright)',
-                fontFamily: 'var(--font-mono)',
-                fontWeight: 600,
-                fontSize: '12px',
-                letterSpacing: '-0.02em',
-                textShadow: isNearSpread ? `0 0 12px ${isAsk ? 'var(--color-sell-glow)' : 'var(--color-buy-glow)'}` : 'none'
-            }}>
+                <span style={{
+                    color: isAsk ? 'var(--color-sell-bright)' : 'var(--color-buy-bright)',
+                    fontFamily: 'var(--font-mono)',
+                    fontWeight: 600,
+                    fontSize: '12px',
+                    letterSpacing: '-0.02em',
+                    textShadow: isNearSpread ? `0 0 10px ${isAsk ? 'var(--color-sell-glow)' : 'var(--color-buy-glow)'}` : 'none'
+                }}>
                 {displayPrice.toFixed(pxDecimals)}
             </span>
             <Tooltip content="Next Order Price (Ping-Pong)">
@@ -435,7 +438,7 @@ const ZoneRow: React.FC<{
                     color: 'var(--text-muted)',
                     fontFamily: 'var(--font-mono)',
                     cursor: 'help',
-                    fontSize: '9px',
+                    fontSize: '8px',
                     letterSpacing: '-0.02em'
                 }}>
                     {nextPrice.toFixed(pxDecimals)}
@@ -460,9 +463,9 @@ const ZoneRow: React.FC<{
             textAlign: 'center',
             fontFamily: 'var(--font-mono)',
             color: zone.roundtrip_count > 0 ? 'var(--accent-primary)' : 'var(--text-muted)',
-            fontSize: '11px',
+            fontSize: '10px',
             fontWeight: zone.roundtrip_count > 0 ? 600 : 400,
-            textShadow: zone.roundtrip_count > 0 ? '0 0 10px var(--accent-glow)' : 'none'
+            textShadow: zone.roundtrip_count > 0 ? '0 0 8px var(--accent-glow)' : 'none'
         }}>
             {zone.roundtrip_count}
         </span>
@@ -488,12 +491,12 @@ const ZoneRow: React.FC<{
                     ? (isAsk ? '1.5fr 0.9fr 0.8fr 1.2fr 28px' : '28px 1.2fr 0.8fr 0.9fr 1.5fr')
                     : (isAsk ? '1.5fr 0.9fr 0.8fr 1.2fr' : '1.2fr 0.8fr 0.9fr 1.5fr'),
                 alignItems: 'center',
-                padding: '8px 16px',
+                padding: '7px 12px',
                 fontSize: '12px',
                 opacity: depthOpacity * rowBrightness,
                 borderBottom: '1px solid var(--border-color)',
-                background: isHovered ? 'var(--bg-hover)' : baseRowBg,
-                transition: 'all var(--transition-fast)'
+                background: isHovered ? hoverBg : baseRowBg,
+                transition: 'background var(--transition-fast), opacity var(--transition-fast)'
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
