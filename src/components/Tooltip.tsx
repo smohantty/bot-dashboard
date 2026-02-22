@@ -37,8 +37,8 @@ const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
                     left: coords.left,
                     transform: 'translate(-50%, -100%)',
                     padding: '8px 12px',
-                    background: 'rgba(15, 19, 24, 0.95)',
-                    backdropFilter: 'blur(12px) saturate(180%)',
+                    background: 'var(--bg-elevated)',
+                    backdropFilter: 'blur(12px) saturate(160%)',
                     border: '1px solid var(--border-strong)',
                     borderRadius: 'var(--radius-sm)',
                     color: 'var(--text-primary)',
@@ -46,7 +46,7 @@ const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
                     fontWeight: 500,
                     whiteSpace: 'nowrap',
                     zIndex: 9999,
-                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.03) inset',
+                    boxShadow: 'var(--shadow-md)',
                     pointerEvents: 'none',
                     animation: 'fadeIn 0.15s ease-out'
                 }}>
@@ -73,7 +73,7 @@ const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
                         height: 0,
                         borderLeft: '4px solid transparent',
                         borderRight: '4px solid transparent',
-                        borderTop: '4px solid rgba(15, 19, 24, 0.95)'
+                        borderTop: '4px solid var(--bg-elevated)'
                     }} />
                 </div>,
                 document.body

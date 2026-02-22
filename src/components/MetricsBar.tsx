@@ -90,7 +90,7 @@ const MetricsBar: React.FC = () => {
             <div style={{
                 display: 'flex',
                 alignItems: 'stretch',
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%)',
+                background: `linear-gradient(180deg, var(--card-gradient-start) 0%, transparent 100%)`,
                 borderBottom: '1px solid var(--border-color)'
             }}>
                 {/* Symbol + Price Section */}
@@ -100,7 +100,7 @@ const MetricsBar: React.FC = () => {
                     alignItems: 'center',
                     gap: '14px',
                     borderRight: '1px solid var(--border-color)',
-                    background: 'linear-gradient(135deg, rgba(0, 245, 212, 0.03) 0%, transparent 60%)'
+                    background: `linear-gradient(135deg, var(--accent-subtle) 0%, transparent 60%)`
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{
@@ -211,7 +211,7 @@ const MetricsBar: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 padding: '10px 0',
-                background: 'rgba(0, 0, 0, 0.15)'
+                background: 'var(--bg-hover)'
             }}>
                 {isPerp ? (
                     // Perp Grid Row 2
@@ -283,7 +283,7 @@ const MetricCell: React.FC<{
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        background: highlight ? 'rgba(0, 245, 212, 0.03)' : 'transparent',
+        background: highlight ? 'var(--accent-subtle)' : 'transparent',
         minWidth: '75px'
     }}>
         <div style={{
@@ -323,7 +323,7 @@ const MetricCellCompact: React.FC<{
         alignItems: 'center',
         gap: '8px',
         borderRight: '1px solid var(--border-subtle)',
-        background: highlight ? 'rgba(0, 245, 212, 0.05)' : 'transparent',
+        background: highlight ? 'var(--accent-subtle)' : 'transparent',
         borderRadius: highlight ? 'var(--radius-sm)' : undefined
     }}>
         <span style={{

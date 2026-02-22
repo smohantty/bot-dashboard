@@ -12,7 +12,7 @@ Real-time trading bot dashboard for multi-exchange grid trading (Hyperliquid, Li
 - **TypeScript 5.4** (strict mode, no `any`)
 - **Vite 5.2** (build tool, dev server on :5173)
 - **Electron 39** (desktop packaging, Linux AppImage)
-- **CSS Variables** (custom dark theme, no CSS framework)
+- **CSS Variables** (dark + light themes via `data-theme`, no CSS framework)
 - **Fonts:** Geist (UI) + JetBrains Mono (data/numbers)
 
 ## Quick Commands
@@ -33,7 +33,7 @@ npm run electron:build   # Production AppImage
 4. **All state comes from `useBotStore()`** — never create local WebSocket connections in components.
 5. **CSS variables for all colors** — defined in `src/index.css`. Never hardcode color values.
 6. **Dashboard must fit 1280x720** without scrolling the main window (internal scrolls OK).
-7. **Dark mode only** — no light theme support.
+7. **Theme support** — dark (default) + light via `ThemeContext`. Use CSS variables, never hardcode colors.
 
 ## Architecture
 
@@ -51,6 +51,7 @@ Backend (Python) → WebSocket → WebSocketContext → React Components
 | File | Purpose |
 |------|---------|
 | `src/context/WebSocketContext.tsx` | State management + WS lifecycle |
+| `src/context/ThemeContext.tsx` | Dark/Light theme toggle + persistence |
 | `src/types/schema.ts` | All TypeScript data models |
 | `schema/schema.json` | API contract (source of truth) |
 | `src/index.css` | Theme variables + component styles |

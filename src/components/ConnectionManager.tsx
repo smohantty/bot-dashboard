@@ -54,7 +54,7 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.6)',
+            backgroundColor: 'var(--bg-overlay)',
             backdropFilter: 'blur(12px)',
             display: 'flex',
             justifyContent: 'center',
@@ -63,22 +63,23 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
             animation: 'fadeIn 0.2s ease-out'
         }}>
             <div style={{
-                background: 'rgba(20, 20, 25, 0.95)',
-                border: '1px solid var(--border-color)',
-                borderRadius: '16px',
+                background: 'var(--bg-modal)',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: 'var(--radius-lg)',
                 width: '550px',
                 maxWidth: '90%',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.05)',
+                boxShadow: 'var(--shadow-lg)',
                 overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
-                maxHeight: '85vh'
+                maxHeight: '85vh',
+                transition: 'background var(--transition-normal), border-color var(--transition-normal)'
             }}>
                 {/* Header */}
                 <div style={{
                     padding: '24px',
                     borderBottom: '1px solid var(--border-color)',
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%)',
+                    background: `linear-gradient(180deg, var(--card-gradient-start) 0%, transparent 100%)`,
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center'
@@ -109,7 +110,7 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
                             color: 'var(--text-secondary)',
                             width: '32px',
                             height: '32px',
-                            borderRadius: '8px',
+                            borderRadius: 'var(--radius-sm)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -146,13 +147,14 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
                                     onChange={e => setNewBotName(e.target.value)}
                                     style={{
                                         padding: '10px 12px',
-                                        borderRadius: '8px',
+                                        borderRadius: 'var(--radius-sm)',
                                         border: '1px solid var(--border-color)',
-                                        background: 'rgba(0,0,0,0.3)',
+                                        background: 'var(--bg-input)',
                                         color: 'var(--text-primary)',
                                         fontSize: '14px',
                                         outline: 'none',
-                                        transition: 'border-color 0.2s'
+                                        transition: 'border-color 0.2s',
+                                        fontFamily: 'inherit'
                                     }}
                                 />
                                 <input
@@ -162,9 +164,9 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
                                     onChange={e => setNewBotUrl(e.target.value)}
                                     style={{
                                         padding: '10px 12px',
-                                        borderRadius: '8px',
+                                        borderRadius: 'var(--radius-sm)',
                                         border: '1px solid var(--border-color)',
-                                        background: 'rgba(0,0,0,0.3)',
+                                        background: 'var(--bg-input)',
                                         color: 'var(--text-primary)',
                                         fontSize: '14px',
                                         outline: 'none',
@@ -180,7 +182,7 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
                                     backgroundColor: 'var(--accent-primary)',
                                     color: '#000',
                                     border: 'none',
-                                    borderRadius: '8px',
+                                    borderRadius: 'var(--radius-sm)',
                                     fontWeight: 600,
                                     cursor: 'pointer',
                                     fontSize: '14px',
@@ -190,7 +192,8 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
                                     gap: '8px',
                                     opacity: (!newBotName || !newBotUrl) ? 0.5 : 1,
                                     transition: 'all 0.2s',
-                                    boxShadow: '0 4px 12px rgba(0, 245, 212, 0.2)'
+                                    boxShadow: '0 4px 12px var(--accent-glow)',
+                                    fontFamily: 'inherit'
                                 }}
                             >
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -220,7 +223,7 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
                                 textAlign: 'center',
                                 color: 'var(--text-tertiary)',
                                 border: '1px dashed var(--border-subtle)',
-                                borderRadius: '12px',
+                                borderRadius: 'var(--radius-md)',
                                 fontSize: '14px'
                             }}>
                                 No saved connections found.
@@ -235,7 +238,7 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
                                         padding: '16px',
                                         background: 'var(--bg-card)',
                                         border: '1px solid var(--border-subtle)',
-                                        borderRadius: '12px',
+                                        borderRadius: 'var(--radius-md)',
                                         transition: 'border-color 0.2s'
                                     }}>
                                         <div>
@@ -258,14 +261,15 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
                                             onClick={() => handleDelete(c.id)}
                                             style={{
                                                 padding: '8px 12px',
-                                                background: 'rgba(239, 68, 68, 0.1)',
+                                                background: 'var(--color-sell-bg)',
                                                 color: 'var(--color-sell)',
                                                 border: '1px solid rgba(239, 68, 68, 0.2)',
-                                                borderRadius: '8px',
+                                                borderRadius: 'var(--radius-sm)',
                                                 cursor: 'pointer',
                                                 fontSize: '12px',
                                                 fontWeight: 500,
-                                                transition: 'all 0.2s'
+                                                transition: 'all 0.2s',
+                                                fontFamily: 'inherit'
                                             }}
                                         >
                                             Delete
@@ -280,8 +284,9 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
                 <div style={{
                     padding: '16px 24px',
                     borderTop: '1px solid var(--border-color)',
-                    background: '#151515',
-                    textAlign: 'right'
+                    background: 'var(--bg-modal-footer)',
+                    textAlign: 'right',
+                    transition: 'background var(--transition-normal), border-color var(--transition-normal)'
                 }}>
                     <button
                         onClick={onClose}
@@ -290,10 +295,11 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
                             background: 'var(--bg-hover)',
                             color: 'var(--text-secondary)',
                             border: '1px solid var(--border-color)',
-                            borderRadius: '8px',
+                            borderRadius: 'var(--radius-sm)',
                             cursor: 'pointer',
                             fontSize: '14px',
-                            fontWeight: 500
+                            fontWeight: 500,
+                            fontFamily: 'inherit'
                         }}
                     >
                         Close

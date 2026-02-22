@@ -204,8 +204,8 @@ const ConfigCell: React.FC<{
                 borderRight: isLast ? 'none' : '1px solid var(--border-color)',
                 borderBottom: '1px solid var(--border-color)',
                 background: isHovered
-                    ? 'rgba(255, 255, 255, 0.02)'
-                    : highlight ? `${highlightColor || 'var(--accent-primary)'}08` : 'transparent',
+                    ? 'var(--bg-hover)'
+                    : highlight ? 'var(--accent-subtle)' : 'transparent',
                 transition: 'all var(--transition-fast)'
             }}
             onMouseEnter={() => setIsHovered(true)}
