@@ -28,6 +28,19 @@ interface WebSocketContextType {
 
 const WebSocketContext = createContext<WebSocketContextType | null>(null);
 
+/**
+ * In dev mode, proxy WebSocket through Vite's dev server to avoid
+ * Chrome Private Network Access restrictions (localhost → private IP blocked).
+ * In production (Electron), connect directly.
+ */
+const getWsUrl = (botUrl: string): string => {
+    if (import.meta.env.DEV) {
+        const proxyBase = `ws://${window.location.host}/ws-proxy`;
+        return `${proxyBase}?url=${encodeURIComponent(botUrl)}`;
+    }
+    return botUrl;
+};
+
 export const WebSocketProvider: React.FC<{ children: React.ReactNode; url: string }> = ({ children, url }) => {
     const [isConnected, setIsConnected] = useState(false);
     const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('disconnected');
@@ -42,93 +55,112 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode; url: strin
     const wsRef = useRef<WebSocket | null>(null);
     const reconnectTimeoutRef = useRef<number | null>(null);
 
-    const connect = () => {
-        try {
-            setConnectionStatus('connecting');
-            const ws = new WebSocket(url);
-            wsRef.current = ws;
-
-            ws.onopen = () => {
-                console.log('Connected to Bot WebSocket:', url);
-                setIsConnected(true);
-                setConnectionStatus('connected');
-                if (reconnectTimeoutRef.current) {
-                    clearTimeout(reconnectTimeoutRef.current);
-                    reconnectTimeoutRef.current = null;
-                }
-            };
-
-            ws.onclose = () => {
-                console.log('Disconnected from Bot WebSocket:', url);
-                setIsConnected(false);
-                setConnectionStatus('disconnected');
-                // Auto-reconnect
-                reconnectTimeoutRef.current = window.setTimeout(() => {
-                    console.log('Attempting reconnect to', url);
-                    connect();
-                }, 3000);
-            };
-
-            ws.onerror = (err) => {
-                console.error('WebSocket Error:', err);
-                ws.close();
-            };
-
-            ws.onmessage = (event) => {
-                try {
-                    const message: WebSocketEvent = JSON.parse(event.data);
-
-                    switch (message.event_type) {
-                        case 'config':
-                            // Apply default for optional grid_count
-                            if (message.data.grid_count === undefined) {
-                                message.data.grid_count = 0;
-                            }
-                            setConfig(message.data);
-                            break;
-                        case 'info':
-                            setSystemInfo(message.data);
-                            break;
-                        case 'spot_grid_summary':
-                            setSummary({ type: 'spot_grid', data: message.data });
-                            break;
-                        case 'perp_grid_summary':
-                            setSummary({ type: 'perp_grid', data: message.data });
-                            break;
-                        case 'grid_state':
-                            setGridState(message.data);
-                            break;
-                        case 'market_update':
-                            setLastPrice(message.data.price);
-                            setLastTickTime(Date.now());
-                            break;
-                        case 'order_update':
-                            setOrderHistory(prev => [message.data, ...prev].slice(0, 50)); // Keep last 50
-                            break;
-                        case 'error':
-                            console.error('Bot error:', message.data);
-                            break;
-                    }
-                } catch (e) {
-                    console.error('Failed to parse message:', e);
-                }
-            };
-
-        } catch (e) {
-            console.error('Connection failed:', e);
-            setConnectionStatus('disconnected');
-        }
-    };
-
     // Reconnect if URL changes
     useEffect(() => {
-        connect();
-        return () => {
-            if (wsRef.current) {
-                wsRef.current.close();
+        let cleanedUp = false;
+        let retryCount = 0;
+        const MAX_RETRY_DELAY = 30000; // cap at 30s
+        const BASE_DELAY = 2000;
+
+        const getRetryDelay = () => Math.min(BASE_DELAY * Math.pow(2, retryCount), MAX_RETRY_DELAY);
+
+        const connect = () => {
+            if (cleanedUp) return;
+            try {
+                setConnectionStatus('connecting');
+                const wsUrl = getWsUrl(url);
+                const ws = new WebSocket(wsUrl);
+                wsRef.current = ws;
+
+                ws.onopen = () => {
+                    if (cleanedUp) { ws.close(); return; }
+                    console.log('[WS] Connected:', url);
+                    retryCount = 0;
+                    setIsConnected(true);
+                    setConnectionStatus('connected');
+                };
+
+                ws.onclose = () => {
+                    if (cleanedUp) return;
+                    setIsConnected(false);
+                    setConnectionStatus('disconnected');
+                    const delay = getRetryDelay();
+                    if (retryCount === 0) {
+                        console.log('[WS] Disconnected from', url, '— reconnecting...');
+                    } else {
+                        console.log(`[WS] Retry #${retryCount + 1} in ${(delay / 1000).toFixed(0)}s`);
+                    }
+                    retryCount++;
+                    reconnectTimeoutRef.current = window.setTimeout(connect, delay);
+                };
+
+                ws.onerror = () => {
+                    if (cleanedUp) return;
+                    // onclose always fires after onerror, so just close — no extra logging
+                    ws.close();
+                };
+
+                ws.onmessage = (event) => {
+                    if (cleanedUp) return;
+                    try {
+                        const message: WebSocketEvent = JSON.parse(event.data);
+
+                        switch (message.event_type) {
+                            case 'config':
+                                // Apply default for optional grid_count
+                                if (message.data.grid_count === undefined) {
+                                    message.data.grid_count = 0;
+                                }
+                                setConfig(message.data);
+                                break;
+                            case 'info':
+                                setSystemInfo(message.data);
+                                break;
+                            case 'spot_grid_summary':
+                                setSummary({ type: 'spot_grid', data: message.data });
+                                break;
+                            case 'perp_grid_summary':
+                                setSummary({ type: 'perp_grid', data: message.data });
+                                break;
+                            case 'grid_state':
+                                setGridState(message.data);
+                                break;
+                            case 'market_update':
+                                setLastPrice(message.data.price);
+                                setLastTickTime(Date.now());
+                                break;
+                            case 'order_update':
+                                setOrderHistory(prev => [message.data, ...prev].slice(0, 50)); // Keep last 50
+                                break;
+                            case 'error':
+                                console.error('[WS] Bot error:', message.data);
+                                break;
+                        }
+                    } catch (e) {
+                        console.error('[WS] Failed to parse message:', e);
+                    }
+                };
+
+            } catch (e) {
+                console.error('[WS] Connection failed:', e);
+                if (!cleanedUp) {
+                    setConnectionStatus('disconnected');
+                    retryCount++;
+                    reconnectTimeoutRef.current = window.setTimeout(connect, getRetryDelay());
+                }
             }
+        };
+
+        connect();
+
+        return () => {
+            cleanedUp = true;
             if (reconnectTimeoutRef.current) {
                 clearTimeout(reconnectTimeoutRef.current);
+                reconnectTimeoutRef.current = null;
+            }
+            if (wsRef.current) {
+                wsRef.current.close();
             }
         };
     }, [url]);
