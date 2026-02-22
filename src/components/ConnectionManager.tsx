@@ -1,21 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import type { BotConnection } from '../types/connection';
-import { getStoredConnections, saveConnections } from '../utils/storage';
 
 interface ConnectionManagerProps {
+    connections: BotConnection[];
     onClose: () => void;
     onConnectionsChange: (connections: BotConnection[]) => void;
 }
 
-const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnectionsChange }) => {
-    const [connections, setConnections] = useState<BotConnection[]>([]);
+const ConnectionManager: React.FC<ConnectionManagerProps> = ({ connections, onClose, onConnectionsChange }) => {
     const [newBotName, setNewBotName] = useState('');
     const [newBotUrl, setNewBotUrl] = useState('');
-
-    useEffect(() => {
-        const stored = getStoredConnections();
-        setConnections(stored);
-    }, []);
 
     const normalizeWsUrl = (url: string): string => {
         const trimmed = url.trim();
@@ -33,8 +27,6 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
             url: normalizeWsUrl(newBotUrl)
         };
         const updated = [...connections, newConnection];
-        setConnections(updated);
-        saveConnections(updated);
         onConnectionsChange(updated);
         setNewBotName('');
         setNewBotUrl('');
@@ -42,8 +34,6 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onClose, onConnec
 
     const handleDelete = (id: string) => {
         const updated = connections.filter(c => c.id !== id);
-        setConnections(updated);
-        saveConnections(updated);
         onConnectionsChange(updated);
     };
 

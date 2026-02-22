@@ -1,37 +1,25 @@
 import type { BotConnection } from '../types/connection';
 
-const STORAGE_KEY = 'bot_connections';
-
-export const getStoredConnections = (): BotConnection[] => {
+export const loadConnections = async (): Promise<BotConnection[]> => {
     try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            return JSON.parse(stored);
-        }
+        const res = await fetch('/api/bots');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        return data.connections ?? [];
     } catch (e) {
         console.error('Failed to load connections:', e);
+        return [];
     }
-    return [];
 };
 
-export const saveConnections = (connections: BotConnection[]) => {
+export const saveConnections = async (connections: BotConnection[]): Promise<void> => {
     try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));
+        await fetch('/api/bots', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ connections }, null, 2)
+        });
     } catch (e) {
         console.error('Failed to save connections:', e);
     }
-};
-
-export const getDefaultConnection = (): BotConnection => {
-    const port = import.meta.env.VITE_WS_PORT || '9000';
-    // Fallback: if VITE_WS_URL is set, use it; otherwise construct from hostname + port
-    // However, for the purpose of a "default connection" object to be editable,
-    // we usually want a concrete URL.
-    const defaultUrl = import.meta.env.VITE_WS_URL || `ws://${window.location.hostname}:${port}`;
-
-    return {
-        id: 'default',
-        name: 'Default Bot',
-        url: defaultUrl
-    };
 };

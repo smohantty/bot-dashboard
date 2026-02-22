@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { WebSocketProvider } from '../context/WebSocketContext';
 import ConnectionManager from './ConnectionManager';
-import { getDefaultConnection, getStoredConnections, saveConnections } from '../utils/storage';
+import { loadConnections, saveConnections } from '../utils/storage';
 import type { BotConnection } from '../types/connection';
 
 interface MultiBotLayoutProps {
@@ -12,25 +12,24 @@ const MultiBotLayout: React.FC<MultiBotLayoutProps> = ({ children }) => {
     const [connections, setConnections] = useState<BotConnection[]>([]);
     const [activeTabId, setActiveTabId] = useState<string>('');
     const [showManager, setShowManager] = useState(false);
+    const [loaded, setLoaded] = useState(false);
 
-    // Initialize connections
+    // Initialize connections from config file
     useEffect(() => {
-        const stored = getStoredConnections();
-        if (stored.length === 0) {
-            const def = getDefaultConnection();
-            setConnections([def]);
-            setActiveTabId(def.id);
-            // We can choose to save this default or not. 
-            // Saving it makes it explicit for the user to see/edit later.
-            saveConnections([def]);
-        } else {
-            setConnections(stored);
-            setActiveTabId(stored[0].id);
-        }
+        loadConnections().then(conns => {
+            setConnections(conns);
+            if (conns.length > 0) {
+                setActiveTabId(conns[0].id);
+            } else {
+                setShowManager(true);
+            }
+            setLoaded(true);
+        });
     }, []);
 
-    const handleConnectionsChange = (newConnections: BotConnection[]) => {
+    const handleConnectionsChange = async (newConnections: BotConnection[]) => {
         setConnections(newConnections);
+        await saveConnections(newConnections);
         // If the active tab was deleted, switch to the first available or empty
         if (!newConnections.find(c => c.id === activeTabId)) {
             if (newConnections.length > 0) {
@@ -40,6 +39,8 @@ const MultiBotLayout: React.FC<MultiBotLayoutProps> = ({ children }) => {
             }
         }
     };
+
+    if (!loaded) return null;
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
@@ -145,6 +146,7 @@ const MultiBotLayout: React.FC<MultiBotLayoutProps> = ({ children }) => {
             {/* Connection Manager Modal */}
             {showManager && (
                 <ConnectionManager
+                    connections={connections}
                     onClose={() => setShowManager(false)}
                     onConnectionsChange={handleConnectionsChange}
                 />
