@@ -47,11 +47,13 @@ const MultiBotLayout: React.FC<MultiBotLayoutProps> = ({ children }) => {
             <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'var(--bg-primary)',
+                background: 'var(--bg-panel)',
+                backdropFilter: 'blur(20px) saturate(160%)',
                 borderBottom: '1px solid var(--border-color)',
                 padding: '0 16px',
                 height: '48px',
-                flexShrink: 0
+                flexShrink: 0,
+                transition: 'background var(--transition-normal), border-color var(--transition-normal)'
             }}>
                 <div style={{ display: 'flex', gap: '4px', flex: 1, overflowX: 'auto' }}>
                     {connections.map(conn => (
@@ -107,10 +109,20 @@ const MultiBotLayout: React.FC<MultiBotLayoutProps> = ({ children }) => {
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        color: '#666'
+                        color: 'var(--text-tertiary)'
                     }}>
                         <p>No active connections.</p>
-                        <button onClick={() => setShowManager(true)} style={{ marginTop: '10px', padding: '8px 16px', cursor: 'pointer' }}>Add Connection</button>
+                        <button onClick={() => setShowManager(true)} style={{
+                            marginTop: '10px',
+                            padding: '8px 16px',
+                            cursor: 'pointer',
+                            background: 'var(--accent-primary)',
+                            color: '#000',
+                            border: 'none',
+                            borderRadius: 'var(--radius-sm)',
+                            fontWeight: 600,
+                            fontFamily: 'inherit'
+                        }}>Add Connection</button>
                     </div>
                 ) : (
                     connections.map(conn => (

@@ -63,7 +63,7 @@ const ActivityLog: React.FC = () => {
                     letterSpacing: '0.5px',
                     fontWeight: 600,
                     borderBottom: '1px solid var(--border-color)',
-                    background: 'rgba(0, 0, 0, 0.2)',
+                    background: 'var(--bg-hover)',
                     alignItems: 'center'
                 }}>
                     <span>Order</span>
@@ -174,8 +174,8 @@ const OrderEventRow: React.FC<{
     };
 
     const statusConfig = getStatusConfig();
-    const altRowBg = isOdd ? 'rgba(255, 255, 255, 0.015)' : 'transparent';
-    const fillBg = isFilled ? 'rgba(0, 245, 212, 0.03)' : 'transparent'; // Subtle highlight for fills
+    const altRowBg = isOdd ? 'var(--bg-row-alt)' : 'transparent';
+    const fillBg = isFilled ? 'var(--accent-subtle)' : 'transparent';
 
     return (
         <div
@@ -187,7 +187,7 @@ const OrderEventRow: React.FC<{
                 fontSize: '11px',
                 borderBottom: '1px solid var(--border-color)',
                 background: isFirst
-                    ? 'rgba(0, 245, 212, 0.06)'
+                    ? 'var(--accent-subtle)'
                     : isHovered
                         ? 'var(--bg-hover)'
                         : isFilled ? fillBg : altRowBg,

@@ -115,7 +115,7 @@ const OrderBook: React.FC = () => {
                         letterSpacing: '0.6px',
                         fontWeight: 600,
                         borderBottom: '1px solid var(--border-color)',
-                        background: 'linear-gradient(90deg, rgba(34, 197, 94, 0.04) 0%, transparent 100%)'
+                        background: `linear-gradient(90deg, var(--color-buy-bg) 0%, transparent 100%)`
                     }}>
                         {isPerp && <span></span>}
                         <span style={{ textAlign: 'left' }}>Size</span>
@@ -159,7 +159,7 @@ const OrderBook: React.FC = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     padding: '16px 10px',
-                    background: 'linear-gradient(180deg, var(--bg-base) 0%, rgba(3, 5, 8, 0.98) 100%)',
+                    background: 'var(--bg-panel)',
                     borderLeft: '1px solid var(--border-color)',
                     borderRight: '1px solid var(--border-color)',
                     position: 'relative'
@@ -215,9 +215,9 @@ const OrderBook: React.FC = () => {
                         {/* Total Orders */}
                         <div style={{
                             padding: '6px 14px',
-                            background: 'rgba(255, 255, 255, 0.03)',
+                            background: 'var(--bg-hover)',
                             borderRadius: '20px',
-                            border: '1px solid rgba(255, 255, 255, 0.06)',
+                            border: '1px solid var(--border-subtle)',
                             display: 'flex',
                             gap: '8px',
                             alignItems: 'center'
@@ -256,7 +256,7 @@ const OrderBook: React.FC = () => {
                         letterSpacing: '0.6px',
                         fontWeight: 600,
                         borderBottom: '1px solid var(--border-color)',
-                        background: 'linear-gradient(270deg, rgba(239, 68, 68, 0.04) 0%, transparent 100%)'
+                        background: `linear-gradient(270deg, var(--color-sell-bg) 0%, transparent 100%)`
                     }}>
                         <span style={{ textAlign: 'left' }}>Price</span>
                         <span style={{ textAlign: 'left' }}>Dist</span>
@@ -383,8 +383,8 @@ const ZoneRow: React.FC<{
     const rowBrightness = isNearSpread ? 1 : Math.max(0.6, 1 - (zoneIndex / totalZones) * 0.4);
 
     // Row background based on side and alternating pattern
-    const sideColor = isAsk ? 'rgba(239, 68, 68, 0.06)' : 'rgba(34, 197, 94, 0.06)';
-    const altRowBg = zoneIndex % 2 === 1 ? 'rgba(255, 255, 255, 0.015)' : 'transparent';
+    const sideColor = isAsk ? 'var(--color-sell-bg)' : 'var(--color-buy-bg)';
+    const altRowBg = zoneIndex % 2 === 1 ? 'var(--bg-row-alt)' : 'transparent';
     const baseRowBg = isNearSpread ? sideColor : altRowBg;
 
     // Perp position indicator
